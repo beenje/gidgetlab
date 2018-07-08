@@ -1,0 +1,64 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "f4e1a01d01d51331b6dfc5f58c58d36008b96685",
+  "after": "f4e1a01d01d51331b6dfc5f58c58d36008b96685",
+  "ref": "refs/heads/master",
+  "checkout_sha": "f4e1a01d01d51331b6dfc5f58c58d36008b96685",
+  "message": null,
+  "user_id": 442152,
+  "user_name": "Benjamin Bertrand",
+  "user_username": "beenje",
+  "user_email": "beenje@gmail.com",
+  "user_avatar": "https://secure.gravatar.com/avatar/0c56fe36841276dd3505f113b1697192?s=80&d=identicon",
+  "project_id": 7316475,
+  "project": {
+    "id": 7316475,
+    "name": "webhook-test",
+    "description": "",
+    "web_url": "https://gitlab.com/beenje/webhook-test",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.com:beenje/webhook-test.git",
+    "git_http_url": "https://gitlab.com/beenje/webhook-test.git",
+    "namespace": "beenje",
+    "visibility_level": 0,
+    "path_with_namespace": "beenje/webhook-test",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "https://gitlab.com/beenje/webhook-test",
+    "url": "git@gitlab.com:beenje/webhook-test.git",
+    "ssh_url": "git@gitlab.com:beenje/webhook-test.git",
+    "http_url": "https://gitlab.com/beenje/webhook-test.git"
+  },
+  "commits": [
+    {
+      "id": "f4e1a01d01d51331b6dfc5f58c58d36008b96685",
+      "message": "Initial commit\n",
+      "timestamp": "2018-07-01T20:00:42Z",
+      "url": "https://gitlab.com/beenje/webhook-test/commit/f4e1a01d01d51331b6dfc5f58c58d36008b96685",
+      "author": {
+        "name": "Benjamin Bertrand",
+        "email": "beenje@gmail.com"
+      },
+      "added": [
+        "README.md"
+      ],
+      "modified": [
+
+      ],
+      "removed": [
+
+      ]
+    }
+  ],
+  "total_commits_count": 1,
+  "repository": {
+    "name": "webhook-test",
+    "url": "git@gitlab.com:beenje/webhook-test.git",
+    "description": "",
+    "homepage": "https://gitlab.com/beenje/webhook-test",
+    "git_http_url": "https://gitlab.com/beenje/webhook-test.git",
+    "git_ssh_url": "git@gitlab.com:beenje/webhook-test.git",
+    "visibility_level": 0
+  }
+}

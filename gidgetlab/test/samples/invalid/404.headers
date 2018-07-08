@@ -1,0 +1,14 @@
+Server: nginx
+Date: Fri, 06 Jul 2018 21:32:06 GMT
+Content-Type: application/json
+Content-Length: 25
+Cache-Control: no-cache
+Vary: Origin
+X-Request-Id: a95628fd-e1aa-4ed1-a2b6-956cfce58fc2
+X-Runtime: 0.031446
+RateLimit-Limit: 600
+RateLimit-Observed: 2
+RateLimit-Remaining: 598
+RateLimit-Reset: 1530912786
+RateLimit-ResetTime: Sat, 06 Jul 2018 21:33:06 GMT
+

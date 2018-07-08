@@ -1,0 +1,25 @@
+Server: nginx
+Date: Fri, 06 Jul 2018 21:32:49 GMT
+Content-Type: application/json
+Content-Length: 8007
+Cache-Control: max-age=0, private, must-revalidate
+Etag: W/"aeaa99fb0e37021e2551555f3d15fe80"
+Link: <https://gitlab.com/api/v4/groups/gitlab-org/projects?archived=false&id=gitlab-org&order_by=created_at&owned=false&page=6&per_page=20&simple=false&sort=desc&starred=false&with_custom_attributes=false&with_issues_enabled=false&with_merge_requests_enabled=false>; rel="prev", <https://gitlab.com/api/v4/groups/gitlab-org/projects?archived=false&id=gitlab-org&order_by=created_at&owned=false&page=1&per_page=20&simple=false&sort=desc&starred=false&with_custom_attributes=false&with_issues_enabled=false&with_merge_requests_enabled=false>; rel="first", <https://gitlab.com/api/v4/groups/gitlab-org/projects?archived=false&id=gitlab-org&order_by=created_at&owned=false&page=7&per_page=20&simple=false&sort=desc&starred=false&with_custom_attributes=false&with_issues_enabled=false&with_merge_requests_enabled=false>; rel="last"
+Vary: Origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Next-Page: 
+X-Page: 7
+X-Per-Page: 20
+X-Prev-Page: 6
+X-Request-Id: 8797805c-7698-4c5a-abf3-873069be88b0
+X-Runtime: 0.306889
+X-Total: 124
+X-Total-Pages: 7
+Strict-Transport-Security: max-age=31536000
+RateLimit-Limit: 600
+RateLimit-Observed: 1
+RateLimit-Remaining: 599
+RateLimit-Reset: 1530912829
+RateLimit-ResetTime: Sat, 06 Jul 2018 21:33:49 GMT
+

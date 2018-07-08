@@ -1,0 +1,25 @@
+Server: nginx
+Date: Fri, 06 Jul 2018 21:32:51 GMT
+Content-Type: application/json
+Content-Length: 800
+Cache-Control: max-age=0, private, must-revalidate
+Etag: W/"8ad3935bfde31d706724c12e97f819fe"
+Link: <https://gitlab.com/api/v4/users/beenje/projects?archived=false&membership=false&order_by=created_at&owned=false&page=1&per_page=20&simple=false&sort=desc&starred=false&statistics=false&user_id=beenje&with_custom_attributes=false&with_issues_enabled=false&with_merge_requests_enabled=false>; rel="first", <https://gitlab.com/api/v4/users/beenje/projects?archived=false&membership=false&order_by=created_at&owned=false&page=1&per_page=20&simple=false&sort=desc&starred=false&statistics=false&user_id=beenje&with_custom_attributes=false&with_issues_enabled=false&with_merge_requests_enabled=false>; rel="last"
+Vary: Origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Next-Page: 
+X-Page: 1
+X-Per-Page: 20
+X-Prev-Page: 
+X-Request-Id: e46bd902-39c6-434b-b5c4-f0c605e96392
+X-Runtime: 0.211344
+X-Total: 1
+X-Total-Pages: 1
+Strict-Transport-Security: max-age=31536000
+RateLimit-Limit: 600
+RateLimit-Observed: 3
+RateLimit-Remaining: 597
+RateLimit-Reset: 1530912831
+RateLimit-ResetTime: Sat, 06 Jul 2018 21:33:51 GMT
+

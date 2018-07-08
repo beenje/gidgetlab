@@ -1,0 +1,15 @@
+Server: nginx
+Date: Fri, 06 Jul 2018 21:49:43 GMT
+Cache-Control: no-cache
+Vary: Origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Request-Id: 349f8ecb-8966-45c6-95b8-f7c035954cc7
+X-Runtime: 0.797502
+Strict-Transport-Security: max-age=31536000
+RateLimit-Limit: 600
+RateLimit-Observed: 6
+RateLimit-Remaining: 594
+RateLimit-Reset: 1530913843
+RateLimit-ResetTime: Sat, 06 Jul 2018 21:50:43 GMT
+

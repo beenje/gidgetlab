@@ -1,0 +1,3 @@
+Content-Type: application/json
+X-Gitlab-Event: Push Hook
+X-Gitlab-Token: my-secret-token

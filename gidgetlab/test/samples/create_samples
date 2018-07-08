@@ -1,0 +1,26 @@
+#!/bin/bash
+# This script requires httpie
+
+function create_headers {
+  request="$1"
+  
+  http -h "$request" > headers.tmp
+  status=$(awk '/^HTTP/ {print $2}' headers.tmp)
+  tail -n +2 headers.tmp > ${status}.headers
+  rm headers.tmp
+}
+
+for directory in $@
+do
+  if [[ ! -f $directory/request ]]
+  then
+    echo "No $directory/request found. Skipping..."
+  else
+    echo "Creating headers and body for $directory"
+    cd $directory
+    request=$(cat request)
+    create_headers "$request"
+    http -b "$request" > body
+    cd -
+  fi
+done

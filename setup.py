@@ -1,5 +1,4 @@
 import pathlib
-
 import setuptools
 
 
@@ -12,13 +11,13 @@ tornado_requires = ["tornado"]
 long_description = pathlib.Path("README.rst").read_text("utf-8")
 
 setuptools.setup(
-    name="gidgethub",
-    version="3.0.0.dev",
-    description="An async GitHub API library",
+    name="gidgetlab",
+    version="0.1.0.dev",
+    description="An async GitLab API library",
     long_description=long_description,
-    url="https://gidgethub.readthedocs.io",
-    author="Brett Cannon",
-    author_email="brett@python.org",
+    url="https://gitlab.com/beenje/gidgetlab",
+    author="Benjamin Bertrand",
+    author_email="beenje@gmail.com",
     license="Apache",
     classifiers=[
         'Intended Audience :: Developers',
@@ -27,7 +26,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',
     ],
-    keywords="github sans-io async",
+    keywords="gitlab sans-io async",
     packages=setuptools.find_packages(),
     zip_safe=True,
     python_requires=">=3.6.0",
