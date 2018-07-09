@@ -10,7 +10,7 @@ import datetime
 import http
 import json
 import re
-from typing import Any, Dict, Mapping, Optional, Tuple
+from typing import Any, Dict, Mapping, Optional, Tuple, Type
 import urllib.parse
 
 from . import (

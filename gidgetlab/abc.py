@@ -22,13 +22,13 @@ class GitLabAPI(abc.ABC):
         requester: str,
         *,
         access_token: Opt[str] = None,
-        url: Opt[str] = "https://gitlab.com",
-        api_version: Opt[str] = "v4",
+        url: str = "https://gitlab.com",
+        api_version: str = "v4",
         cache: Opt[CACHE_TYPE] = None,
     ) -> None:
         self.requester = requester
         self.access_token = access_token
-        self.api_url = urllib.parse.urljoin(url, f"/api/{api_version}/")
+        self.api_url: str = urllib.parse.urljoin(url, f"/api/{api_version}/")
         self._cache = cache
         self.rate_limit: Opt[sansio.RateLimit] = None
 

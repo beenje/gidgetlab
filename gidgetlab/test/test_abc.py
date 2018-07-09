@@ -1,10 +1,5 @@
-import asyncio
-import datetime
 import json
-import types
-
 import pytest
-
 from .. import RedirectionException
 from .. import abc as gl_abc
 
@@ -150,7 +145,7 @@ async def test_post():
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
     headers["content-type"] = "application/json; charset=utf-8"
     gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
-    data = await gl.post("/fake", data=send)
+    await gl.post("/fake", data=send)
     assert gl.method == "POST"
     assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
@@ -165,7 +160,7 @@ async def test_patch():
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
     headers["content-type"] = "application/json; charset=utf-8"
     gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
-    data = await gl.patch("/fake", data=send)
+    await gl.patch("/fake", data=send)
     assert gl.method == "PATCH"
     assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
@@ -180,7 +175,7 @@ async def test_put():
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
     headers["content-type"] = "application/json; charset=utf-8"
     gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
-    data = await gl.put("/fake", data=send)
+    await gl.put("/fake", data=send)
     assert gl.method == "PUT"
     assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
@@ -195,7 +190,7 @@ async def test_delete():
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
     headers["content-type"] = "application/json; charset=utf-8"
     gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
-    data = await gl.delete("/fake", data=send)
+    await gl.delete("/fake", data=send)
     assert gl.method == "DELETE"
     assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json

@@ -1,10 +1,7 @@
 import datetime
 
-from twisted.internet import reactor
 from twisted.internet.defer import ensureDeferred
 from twisted.trial.unittest import TestCase
-from twisted.web.client import Agent, HTTPConnectionPool
-
 from .. import treq as gl_treq
 from .. import sansio
 

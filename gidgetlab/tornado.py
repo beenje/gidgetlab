@@ -1,8 +1,6 @@
-from typing import Mapping, Optional, Tuple
-
+from typing import Mapping, Tuple
 from tornado import gen
 from tornado import httpclient
-
 from . import abc as gl_abc
 
 
