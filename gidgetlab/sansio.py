@@ -13,8 +13,15 @@ import re
 from typing import Any, Dict, Mapping, Optional, Tuple
 import urllib.parse
 
-from . import (BadRequest, GitLabBroken, HTTPException, InvalidField,
-               RateLimitExceeded, RedirectionException, ValidationFailure)
+from . import (
+    BadRequest,
+    GitLabBroken,
+    HTTPException,
+    InvalidField,
+    RateLimitExceeded,
+    RedirectionException,
+    ValidationFailure,
+)
 
 
 def _parse_content_type(content_type: Optional[str]) -> Tuple[Optional[str], str]:
@@ -32,8 +39,9 @@ def _parse_content_type(content_type: Optional[str]) -> Tuple[Optional[str], str
         return type_, encoding
 
 
-def _decode_body(content_type: Optional[str], body: bytes,
-                 *, strict: bool = False) -> Any:
+def _decode_body(
+    content_type: Optional[str], body: bytes, *, strict: bool = False
+) -> Any:
     """Decode an HTTP body based on the specified content type.
 
     If 'strict' is true, then raise ValueError if the content type
@@ -69,8 +77,9 @@ class Event:
         self.secret = secret
 
     @classmethod
-    def from_http(cls, headers: Mapping, body: bytes,
-                  *, secret: Optional[str] = None) -> "Event":
+    def from_http(
+        cls, headers: Mapping, body: bytes, *, secret: Optional[str] = None
+    ) -> "Event":
         """Construct an event from HTTP headers and JSON body data.
 
         The mapping providing the headers is expected to support lowercase keys.
@@ -97,15 +106,18 @@ class Event:
         try:
             data = _decode_body(headers["content-type"], body, strict=True)
         except (KeyError, ValueError) as exc:
-            raise BadRequest(http.HTTPStatus(415),
-                             "expected a content-type of "
-                             "'application/json' or "
-                             "'application/x-www-form-urlencoded'") from exc
+            raise BadRequest(
+                http.HTTPStatus(415),
+                "expected a content-type of "
+                "'application/json' or "
+                "'application/x-www-form-urlencoded'",
+            ) from exc
         return cls(data, event=headers["x-gitlab-event"], secret=secret)
 
 
-def create_headers(requester: str, *,
-                   access_token: Optional[str] = None) -> Dict[str, str]:
+def create_headers(
+    requester: str, *, access_token: Optional[str] = None
+) -> Dict[str, str]:
     """Create a dict representing GitLab-specific header fields.
 
     The user agent is set according to who the requester is. GitLab asks it be
@@ -159,8 +171,9 @@ class RateLimit:
         self.remaining = remaining
         # Name specifies the type to remind users that the epoch is not stored
         # as an int as the GitLab API returns.
-        self.reset_datetime = datetime.datetime.fromtimestamp(reset_epoch,
-                                                              datetime.timezone.utc)
+        self.reset_datetime = datetime.datetime.fromtimestamp(
+            reset_epoch, datetime.timezone.utc
+        )
 
     def __bool__(self) -> bool:
         """True if requests are remaining or the reset datetime has passed."""
@@ -191,8 +204,10 @@ class RateLimit:
             return cls(limit=limit, remaining=remaining, reset_epoch=reset_epoch)
 
 
-_link_re = re.compile(r'\<(?P<uri>[^>]+)\>;\s*'
-                      r'(?P<param_type>\w+)="(?P<param_value>\w+)"(,\s*)?')
+_link_re = re.compile(
+    r"\<(?P<uri>[^>]+)\>;\s*" r'(?P<param_type>\w+)="(?P<param_value>\w+)"(,\s*)?'
+)
+
 
 def _next_link(link: Optional[str]) -> Optional[str]:
     # https://docs.gitlab.com/ce/api/#pagination
@@ -207,8 +222,9 @@ def _next_link(link: Optional[str]) -> Optional[str]:
         return None
 
 
-def decipher_response(status_code: int, headers: Mapping,
-                      body: bytes) -> Tuple[Any, Optional[RateLimit], Optional[str]]:
+def decipher_response(
+    status_code: int, headers: Mapping, body: bytes
+) -> Tuple[Any, Optional[RateLimit], Optional[str]]:
     """Decipher an HTTP response for a GitLab API request.
 
     The mapping providing the headers is expected to support lowercase keys.
@@ -265,5 +281,5 @@ def decipher_response(status_code: int, headers: Mapping,
         if message:
             args = status_code_enum, message
         else:
-            args = status_code_enum,
+            args = (status_code_enum,)
         raise exc_type(*args)

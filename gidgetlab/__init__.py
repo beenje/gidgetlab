@@ -1,5 +1,5 @@
 """An async GitLab API library"""
-__version__ = '0.1.0.dev'
+__version__ = "0.1.0.dev"
 
 import http
 from typing import Any
@@ -13,6 +13,7 @@ class GitLabException(Exception):
 class ValidationFailure(GitLabException):
 
     """An exception representing failed validation of a webhook event."""
+
     # https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#secret-token
 
 
@@ -38,6 +39,7 @@ class BadRequest(HTTPException):
 
     Used for 4XX HTTP errors.
     """
+
     # https://docs.gitlab.com/ce/api/#data-validation-and-error-reporting
 
 
@@ -51,8 +53,7 @@ class RateLimitExceeded(BadRequest):
         self.rate_limit = rate_limit
 
         if not args:
-            super().__init__(http.HTTPStatus.FORBIDDEN,
-                             "rate limit exceeded")
+            super().__init__(http.HTTPStatus.FORBIDDEN, "rate limit exceeded")
         else:
             super().__init__(http.HTTPStatus.FORBIDDEN, *args)
 

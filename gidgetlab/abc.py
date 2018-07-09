@@ -17,19 +17,25 @@ class GitLabAPI(abc.ABC):
 
     """Provide an idiomatic API for making calls to GitLab's API."""
 
-    def __init__(self, requester: str, *, access_token: Opt[str] = None,
-                 url: Opt[str] = 'https://gitlab.com',
-                 api_version: Opt[str] = 'v4',
-                 cache: Opt[CACHE_TYPE] = None) -> None:
+    def __init__(
+        self,
+        requester: str,
+        *,
+        access_token: Opt[str] = None,
+        url: Opt[str] = "https://gitlab.com",
+        api_version: Opt[str] = "v4",
+        cache: Opt[CACHE_TYPE] = None,
+    ) -> None:
         self.requester = requester
         self.access_token = access_token
-        self.api_url = urllib.parse.urljoin(url, f'/api/{api_version}/')
+        self.api_url = urllib.parse.urljoin(url, f"/api/{api_version}/")
         self._cache = cache
         self.rate_limit: Opt[sansio.RateLimit] = None
 
     @abc.abstractmethod
-    async def _request(self, method: str, url: str, headers: Mapping,
-                       body: bytes = b'') -> Tuple[int, Mapping, bytes]:
+    async def _request(
+        self, method: str, url: str, headers: Mapping, body: bytes = b""
+    ) -> Tuple[int, Mapping, bytes]:
         """Make an HTTP request."""
 
     @abc.abstractmethod
@@ -46,16 +52,18 @@ class GitLabAPI(abc.ABC):
         The dict provided in url_vars is used in URI template formatting.
         """
         # Works even if 'url' is fully-qualified.
-        url = urllib.parse.urljoin(self.api_url, url.lstrip('/'))
+        url = urllib.parse.urljoin(self.api_url, url.lstrip("/"))
         expanded_url: str = uritemplate.expand(url, var_dict=url_vars)
         return expanded_url
 
-    async def _make_request(self, method: str, url: str, url_vars: Dict,
-                            data: Any) -> Tuple[bytes, Opt[str]]:
+    async def _make_request(
+        self, method: str, url: str, url_vars: Dict, data: Any
+    ) -> Tuple[bytes, Opt[str]]:
         """Construct and make an HTTP request."""
         filled_url = self.format_url(url, url_vars)
-        request_headers = sansio.create_headers(self.requester,
-                                                access_token=self.access_token)
+        request_headers = sansio.create_headers(
+            self.requester, access_token=self.access_token
+        )
         cached = cacheable = False
         # Can't use None as a "no body" sentinel as it's a legitimate JSON type.
         if data == b"":
@@ -76,15 +84,14 @@ class GitLabAPI(abc.ABC):
         else:
             charset = "utf-8"
             body = json.dumps(data).encode(charset)
-            request_headers['content-type'] = f"application/json; charset={charset}"
-            request_headers['content-length'] = str(len(body))
+            request_headers["content-type"] = f"application/json; charset={charset}"
+            request_headers["content-length"] = str(len(body))
         if self.rate_limit is not None:
             self.rate_limit.remaining -= 1
         response = await self._request(method, filled_url, request_headers, body)
         if not (response[0] == 304 and cached):
             data, self.rate_limit, more = sansio.decipher_response(*response)
-            has_cache_details = ("etag" in response[1]
-                                 or "last-modified" in response[1])
+            has_cache_details = "etag" in response[1] or "last-modified" in response[1]
             if self._cache is not None and cacheable and has_cache_details:
                 etag = response[1].get("etag")
                 last_modified = response[1].get("last-modified")

@@ -7,9 +7,9 @@ from . import abc as gl_abc
 
 
 class GitLabAPI(gl_abc.GitLabAPI):
-
-    async def _request(self, method: str, url: str, headers: Mapping,
-                       body: bytes = b'') -> Tuple[int, Mapping, bytes]:
+    async def _request(
+        self, method: str, url: str, headers: Mapping, body: bytes = b""
+    ) -> Tuple[int, Mapping, bytes]:
         """Make an HTTP request."""
         if method == "GET" and not body:
             real_body = None

@@ -11,20 +11,35 @@ from .. import abc as gl_abc
 
 class MockGitLabAPI(gl_abc.GitLabAPI):
 
-    DEFAULT_HEADERS = {"ratelimit-limit": "2", "ratelimit-remaining": "1",
-                       "ratelimit-reset": "0",
-                       "content-type": "application/json"}
+    DEFAULT_HEADERS = {
+        "ratelimit-limit": "2",
+        "ratelimit-remaining": "1",
+        "ratelimit-reset": "0",
+        "content-type": "application/json",
+    }
 
-    def __init__(self, status_code=200, headers=DEFAULT_HEADERS, body=b'', *,
-                 url='https://gitlab.com', api_version='v4',
-                 cache=None):
+    def __init__(
+        self,
+        status_code=200,
+        headers=DEFAULT_HEADERS,
+        body=b"",
+        *,
+        url="https://gitlab.com",
+        api_version="v4",
+        cache=None,
+    ):
         self.response_code = status_code
         self.response_headers = headers
         self.response_body = body
-        super().__init__("test_abc", access_token="access token",
-                         url=url, api_version=api_version, cache=cache)
+        super().__init__(
+            "test_abc",
+            access_token="access token",
+            url=url,
+            api_version=api_version,
+            cache=cache,
+        )
 
-    async def _request(self, method, url, headers, body=b''):
+    async def _request(self, method, url, headers, body=b""):
         """Make an HTTP request."""
         self.method = method
         self.url = url
@@ -64,8 +79,11 @@ async def test_headers():
 @pytest.mark.asyncio
 async def test_rate_limit_set():
     """The rate limit is updated after receiving a response."""
-    rate_headers = {"ratelimit-limit": "42", "ratelimit-remaining": "1",
-                    "ratelimit-reset": "0"}
+    rate_headers = {
+        "ratelimit-limit": "42",
+        "ratelimit-remaining": "1",
+        "ratelimit-reset": "0",
+    }
     gl = MockGitLabAPI(headers=rate_headers)
     await gl._make_request("GET", "/rate_limit", {}, "")
     assert gl.rate_limit.limit == 42
@@ -76,10 +94,9 @@ async def test_decoding():
     """Test that appropriate decoding occurs."""
     original_data = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=utf-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(original_data).encode("utf8"))
-    data, _ = await gl._make_request("GET", "/rate_limit", {}, '')
+    headers["content-type"] = "application/json; charset=utf-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(original_data).encode("utf8"))
+    data, _ = await gl._make_request("GET", "/rate_limit", {}, "")
     assert data == original_data
 
 
@@ -87,8 +104,7 @@ async def test_decoding():
 async def test_more():
     """The 'next' link is returned appropriately."""
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['link'] = ("<https://gitlab.com/api/v4/fake?page=2>; "
-                       "rel=\"next\"")
+    headers["link"] = "<https://gitlab.com/api/v4/fake?page=2>; " 'rel="next"'
     gl = MockGitLabAPI(headers=headers)
     _, more = await gl._make_request("GET", "/fake", {}, "")
     assert more == "https://gitlab.com/api/v4/fake?page=2"
@@ -98,9 +114,8 @@ async def test_more():
 async def test_getitem():
     original_data = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=UTF-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(original_data).encode("utf8"))
+    headers["content-type"] = "application/json; charset=UTF-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(original_data).encode("utf8"))
     data = await gl.getitem("/fake")
     assert gl.method == "GET"
     assert data == original_data
@@ -112,10 +127,9 @@ async def test_getiter():
     original_data = [1, 2]
     next_url = "https://gitlab.com/api/v4/fake{/extra}?page=2"
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=UTF-8"
+    headers["content-type"] = "application/json; charset=UTF-8"
     headers["link"] = f'<{next_url}>; rel="next"'
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(original_data).encode("utf8"))
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(original_data).encode("utf8"))
     data = []
     async for item in gl.getiter("/fake", {"extra": "stuff"}):
         data.append(item)
@@ -134,14 +148,13 @@ async def test_post():
     send_json = json.dumps(send).encode("utf-8")
     receive = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=utf-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(receive).encode("utf-8"))
+    headers["content-type"] = "application/json; charset=utf-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
     data = await gl.post("/fake", data=send)
     assert gl.method == "POST"
-    assert gl.headers['content-type'] == "application/json; charset=utf-8"
+    assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
-    assert gl.headers['content-length'] == str(len(send_json))
+    assert gl.headers["content-length"] == str(len(send_json))
 
 
 @pytest.mark.asyncio
@@ -150,14 +163,13 @@ async def test_patch():
     send_json = json.dumps(send).encode("utf-8")
     receive = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=utf-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(receive).encode("utf-8"))
+    headers["content-type"] = "application/json; charset=utf-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
     data = await gl.patch("/fake", data=send)
     assert gl.method == "PATCH"
-    assert gl.headers['content-type'] == "application/json; charset=utf-8"
+    assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
-    assert gl.headers['content-length'] == str(len(send_json))
+    assert gl.headers["content-length"] == str(len(send_json))
 
 
 @pytest.mark.asyncio
@@ -166,14 +178,13 @@ async def test_put():
     send_json = json.dumps(send).encode("utf-8")
     receive = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=utf-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(receive).encode("utf-8"))
+    headers["content-type"] = "application/json; charset=utf-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
     data = await gl.put("/fake", data=send)
     assert gl.method == "PUT"
-    assert gl.headers['content-type'] == "application/json; charset=utf-8"
+    assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
-    assert gl.headers['content-length'] == str(len(send_json))
+    assert gl.headers["content-length"] == str(len(send_json))
 
 
 @pytest.mark.asyncio
@@ -182,18 +193,16 @@ async def test_delete():
     send_json = json.dumps(send).encode("utf-8")
     receive = {"hello": "world"}
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
-    headers['content-type'] = "application/json; charset=utf-8"
-    gl = MockGitLabAPI(headers=headers,
-                       body=json.dumps(receive).encode("utf-8"))
+    headers["content-type"] = "application/json; charset=utf-8"
+    gl = MockGitLabAPI(headers=headers, body=json.dumps(receive).encode("utf-8"))
     data = await gl.delete("/fake", data=send)
     assert gl.method == "DELETE"
-    assert gl.headers['content-type'] == "application/json; charset=utf-8"
+    assert gl.headers["content-type"] == "application/json; charset=utf-8"
     assert gl.body == send_json
-    assert gl.headers['content-length'] == str(len(send_json))
+    assert gl.headers["content-length"] == str(len(send_json))
 
 
 class TestCache:
-
     @pytest.mark.asyncio
     async def test_if_none_match_sent(self):
         etag = "12345"
@@ -203,14 +212,13 @@ class TestCache:
         assert "if-none-match" in gl.headers
         assert gl.headers["if-none-match"] == etag
 
-
     @pytest.mark.asyncio
     async def test_etag_received(self):
         cache = {}
         etag = "12345"
         headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
         headers["etag"] = etag
-        gl = MockGitLabAPI(200, headers, b'42', cache=cache)
+        gl = MockGitLabAPI(200, headers, b"42", cache=cache)
         data = await gl.getitem("/fake")
         url = "https://gitlab.com/api/v4/fake"
         assert url in cache
@@ -232,7 +240,7 @@ class TestCache:
         last_modified = "12345"
         headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
         headers["last-modified"] = last_modified
-        gl = MockGitLabAPI(200, headers, b'42', cache=cache)
+        gl = MockGitLabAPI(200, headers, b"42", cache=cache)
         data = await gl.getitem("/fake")
         url = "https://gitlab.com/api/v4/fake"
         assert url in cache
@@ -287,7 +295,6 @@ class TestCache:
 
 
 class TestFormatUrl:
-
     def test_absolute_url(self):
         gl = MockGitLabAPI()
         original_url = "https://gitlab.example.com/api/v4/projects"
@@ -305,7 +312,7 @@ class TestFormatUrl:
         assert url == "https://my.gitlab.example.org/api/v4/projects"
 
     def test_relative_url_non_default_api_version(self):
-        gl = MockGitLabAPI(api_version='v3')
+        gl = MockGitLabAPI(api_version="v3")
         url = gl.format_url("/projects", {})
         assert url == "https://gitlab.com/api/v3/projects"
 
@@ -315,18 +322,29 @@ class TestFormatUrl:
         template_data = {"snipppet_id": "1234"}
         # Substituting an absolute URL.
         url = gl.format_url(template_url, template_data)
-        assert url == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+        assert (
+            url
+            == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+        )
         # No substituting an absolute URL.
         url = gl.format_url(template_url, {})
-        assert url == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets"
+        assert (
+            url == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets"
+        )
         # Substituting a relative URL.
-        url = gl.format_url("/projects/gitlab-org%2Fgitlab-ce/snippets{/snipppet_id}",
-                            template_data)
-        assert url == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+        url = gl.format_url(
+            "/projects/gitlab-org%2Fgitlab-ce/snippets{/snipppet_id}", template_data
+        )
+        assert (
+            url
+            == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+        )
 
     def test_quoting(self):
         gl = MockGitLabAPI()
-        template_url = 'https://gitlab.com/api/v4/repos/python/cpython/labels{/name}'
-        label = {'name': 'CLA signed'}
+        template_url = "https://gitlab.com/api/v4/repos/python/cpython/labels{/name}"
+        label = {"name": "CLA signed"}
         url = gl.format_url(template_url, label)
-        assert url == 'https://gitlab.com/api/v4/repos/python/cpython/labels/CLA%20signed'
+        assert (
+            url == "https://gitlab.com/api/v4/repos/python/cpython/labels/CLA%20signed"
+        )

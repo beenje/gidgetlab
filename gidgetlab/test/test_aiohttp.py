@@ -24,8 +24,9 @@ async def test__request():
     request_headers = sansio.create_headers("gidgetlab")
     async with aiohttp.ClientSession() as session:
         gl = gl_aiohttp.GitLabAPI(session, "gidgetlab")
-        aio_call = await gl._request("GET", "https://gitlab.com/api/v4/templates/licenses/mit",
-                                     request_headers)
+        aio_call = await gl._request(
+            "GET", "https://gitlab.com/api/v4/templates/licenses/mit", request_headers
+        )
     data, rate_limit, _ = sansio.decipher_response(*aio_call)
     assert "description" in data
 

@@ -1,12 +1,17 @@
 import http
 
-from .. import (BadRequest, GitLabBroken, HTTPException, InvalidField,
-                RateLimitExceeded, RedirectionException)
+from .. import (
+    BadRequest,
+    GitLabBroken,
+    HTTPException,
+    InvalidField,
+    RateLimitExceeded,
+    RedirectionException,
+)
 from .. import sansio
 
 
 class TestHTTPException:
-
     def test_status_code_only(self):
         """The status is the message if a better one isn't provided."""
         exc = HTTPException(http.HTTPStatus.BAD_REQUEST)

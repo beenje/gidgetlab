@@ -12,7 +12,6 @@ import treq._utils
 
 
 class TwistedPluginTestCase(TestCase):
-
     @staticmethod
     def create_cleanup(gl):
         def cleanup(_):
@@ -33,6 +32,7 @@ class TwistedPluginTestCase(TestCase):
         def test_done(ignored):
             stop = datetime.datetime.now()
             self.assertTrue((stop - start) > datetime.timedelta(seconds=delay))
+
         d = ensureDeferred(gl.sleep(delay))
         d.addCallback(test_done)
         return d
@@ -42,7 +42,9 @@ class TwistedPluginTestCase(TestCase):
         gl = gl_treq.GitLabAPI("gidgetlab")
         d = ensureDeferred(
             gl._request(
-                "GET", "https://gitlab.com/api/v4/templates/licenses/mit", request_headers,
+                "GET",
+                "https://gitlab.com/api/v4/templates/licenses/mit",
+                request_headers,
             )
         )
 

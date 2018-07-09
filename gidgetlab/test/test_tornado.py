@@ -11,7 +11,6 @@ from .. import tornado as gl_tornado
 
 
 class TornadoTestCase(AsyncTestCase):
-
     @tornado.testing.gen_test
     async def test_sleep(self):
         delay = 1
@@ -26,8 +25,9 @@ class TornadoTestCase(AsyncTestCase):
         """Make sure that that abstract method is implemented properly."""
         request_headers = sansio.create_headers("gidgetlab")
         gl = gl_tornado.GitLabAPI("gidgetlab")
-        tornado_call = await gl._request("GET", "https://gitlab.com/api/v4/templates/licenses/mit",
-                                         request_headers)
+        tornado_call = await gl._request(
+            "GET", "https://gitlab.com/api/v4/templates/licenses/mit", request_headers
+        )
         data, rate_limit, _ = sansio.decipher_response(*tornado_call)
         assert "description" in data
 
@@ -37,8 +37,12 @@ class TornadoTestCase(AsyncTestCase):
         request_headers = sansio.create_headers("gidgetlab")
         gl = gl_tornado.GitLabAPI("gidgetlab")
         # This leads to a 404.
-        tornado_call = await gl._request("POST", "https://gitlab.com/api/v4/templates/licenses/mit",
-                                         request_headers, b'bogus')
+        tornado_call = await gl._request(
+            "POST",
+            "https://gitlab.com/api/v4/templates/licenses/mit",
+            request_headers,
+            b"bogus",
+        )
         with pytest.raises(BadRequest):
             sansio.decipher_response(*tornado_call)
 
