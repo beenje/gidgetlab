@@ -35,13 +35,25 @@ async def test_shallow_callback():
 async def test_deep_callback():
     router = routing.Router()
     callback = Callback()
-    router.add(callback.meth, "Push Hook", data=42)
-    event = sansio.Event({"data": 42}, event="Push Hook", secret="1234")
+    router.add(callback.meth, "Issue Hook", data=42)
+    event = sansio.Event(
+        {"object_attributes": {"data": 42}}, event="Issue Hook", secret="1234"
+    )
     await router.dispatch(event)
     assert callback.called
     assert callback.event == event
     assert not callback.args
     assert not callback.kwargs
+
+
+@pytest.mark.asyncio
+async def test_deep_callback_no_object_attributes():
+    router = routing.Router()
+    callback = Callback()
+    router.add(callback.meth, "Push Hook", data=42)
+    event = sansio.Event({"data": 42}, event="Push Hook", secret="1234")
+    await router.dispatch(event)
+    assert not callback.called
 
 
 def test_too_much_detail():
@@ -55,12 +67,14 @@ async def test_register():
     router = routing.Router()
     called = False
 
-    @router.register("Push Hook", action="new")
+    @router.register("Issue Hook", action="open")
     async def callback(event):
         nonlocal called
         called = True
 
-    event = sansio.Event({"action": "new"}, event="Push Hook", secret="1234")
+    event = sansio.Event(
+        {"object_attributes": {"action": "open"}}, event="Issue Hook", secret="1234"
+    )
     await router.dispatch(event)
     assert called
 
@@ -68,7 +82,11 @@ async def test_register():
 @pytest.mark.asyncio
 async def test_dispatching():
     router = routing.Router()
-    event = sansio.Event({"action": "new", "count": 42}, event="nothing", secret="1234")
+    event = sansio.Event(
+        {"object_attributes": {"action": "new", "count": 42}},
+        event="nothing",
+        secret="1234",
+    )
     await router.dispatch(event)  # Should raise no exceptions.
 
     shallow_registration = Callback()
@@ -98,7 +116,7 @@ async def test_dispatching():
     router.add(never_called_2.meth, "something", never="called")
     router.add(never_called_3.meth, "something", count=-13)
     event = sansio.Event(
-        {"action": "new", "count": 42, "ignored": True},
+        {"object_attributes": {"action": "new", "count": 42, "ignored": True}},
         event="something",
         secret="1234",
     )
@@ -119,7 +137,9 @@ async def test_router_copy():
     shallow_callback = Callback()
     router.add(deep_callback.meth, "something", extra=42)
     router.add(shallow_callback.meth, "something")
-    event = sansio.Event({"extra": 42}, event="something", secret="1234")
+    event = sansio.Event(
+        {"object_attributes": {"extra": 42}}, event="something", secret="1234"
+    )
     await router.dispatch(event)
     assert deep_callback.called
     assert shallow_callback.called

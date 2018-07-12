@@ -19,44 +19,46 @@ class Router:
             for event_type, callbacks in other_router._shallow_routes.items():
                 for callback in callbacks:
                     self.add(callback, event_type)
-            for event_type, data_details in other_router._deep_routes.items():
-                for data_key, data_specifics in data_details.items():
+            for event_type, object_attributes in other_router._deep_routes.items():
+                for data_key, data_specifics in object_attributes.items():
                     for data_value, callbacks in data_specifics.items():
                         detail = {data_key: data_value}
                         for callback in callbacks:
                             self.add(callback, event_type, **detail)
 
-    def add(self, func: AsyncCallback, event_type: str, **data_detail: Any) -> None:
+    def add(
+        self, func: AsyncCallback, event_type: str, **object_attribute: Any
+    ) -> None:
         """Add a new route.
 
         After registering 'func' for the specified event_type, an
-        optional data_detail may be provided. By providing an extra
-        keyword argument, dispatching can occur based on a top-level
-        key of the data in the event being dispatched.
+        optional object_attribute may be provided. By providing an extra
+        keyword argument, dispatching can occur based on a key from the
+        object_attributes dict of the data in the event being dispatched.
         """
-        if len(data_detail) > 1:
+        if len(object_attribute) > 1:
             raise TypeError(
-                "dispatching based on data details is only "
+                "dispatching based on object attributes is only "
                 "supported up to one level deep; "
-                f"{len(data_detail)} levels specified"
+                f"{len(object_attribute)} levels specified"
             )
-        elif not data_detail:
+        elif not object_attribute:
             callbacks = self._shallow_routes.setdefault(event_type, [])
             callbacks.append(func)
         else:
-            data_key, data_value = data_detail.popitem()
-            data_details = self._deep_routes.setdefault(event_type, {})
-            specific_detail = data_details.setdefault(data_key, {})
+            data_key, data_value = object_attribute.popitem()
+            object_attributes = self._deep_routes.setdefault(event_type, {})
+            specific_detail = object_attributes.setdefault(data_key, {})
             callbacks = specific_detail.setdefault(data_value, [])
             callbacks.append(func)
 
     def register(
-        self, event_type: str, **data_detail: Any
+        self, event_type: str, **object_attribute: Any
     ) -> Callable[[AsyncCallback], AsyncCallback]:
         """Decorator to apply the add() method to a function."""
 
         def decorator(func: AsyncCallback) -> AsyncCallback:
-            self.add(func, event_type, **data_detail)
+            self.add(func, event_type, **object_attribute)
             return func
 
         return decorator
@@ -75,8 +77,8 @@ class Router:
             pass
         else:
             for data_key, data_values in details.items():
-                if data_key in event.data:
-                    event_value = event.data[data_key]
+                if data_key in event.object_attributes:
+                    event_value = event.object_attributes[data_key]
                     if event_value in data_values:
                         found_callbacks.extend(data_values[event_value])
         for callback in found_callbacks:

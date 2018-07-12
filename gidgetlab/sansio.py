@@ -10,7 +10,7 @@ import datetime
 import http
 import json
 import re
-from typing import Any, Dict, Mapping, Optional, Tuple, Type
+from typing import Any, Dict, Mapping, Optional, Tuple, Type, Union
 import urllib.parse
 
 from . import (
@@ -76,6 +76,11 @@ class Event:
         self.event = event
         self.secret = secret
 
+    @property
+    def object_attributes(self) -> Union[Dict[str, Any], Any]:
+        """Helper to easily access the object_attributes dict from an event data"""
+        return self.data.get("object_attributes", {})
+
     @classmethod
     def from_http(
         cls, headers: Mapping, body: bytes, *, secret: Optional[str] = None
@@ -85,9 +90,8 @@ class Event:
         The mapping providing the headers is expected to support lowercase keys.
 
         Since this method assumes the body of the HTTP request is JSON, a check
-        is performed for a content-type of "application/json" (GitLab does
-        support other content-types). If the content-type does not match,
-        BadRequest is raised.
+        is performed for a content-type of "application/json".
+        If the content-type does not match, BadRequest is raised.
 
         If the appropriate headers are provided for event validation, then it
         will be performed unconditionally. Any failure in validation
