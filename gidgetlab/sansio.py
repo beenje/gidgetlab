@@ -81,6 +81,14 @@ class Event:
         """Helper to easily access the object_attributes dict from an event data"""
         return self.data.get("object_attributes", {})
 
+    @property
+    def project_id(self) -> Union[int, Any]:
+        """Helper to easily access the project_id from an event data"""
+        try:
+            return self.data["project"]["id"]
+        except KeyError as exc:
+            raise AttributeError(str(exc)) from None
+
     @classmethod
     def from_http(
         cls, headers: Mapping, body: bytes, *, secret: Optional[str] = None

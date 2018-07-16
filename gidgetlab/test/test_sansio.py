@@ -113,6 +113,18 @@ class TestEvent:
         assert event.data == self.data
         assert event.secret is None
 
+    def test_event_without_project_id(self):
+        event = sansio.Event.from_http(
+            self.headers, self.data_bytes, secret=self.secret
+        )
+        with pytest.raises(AttributeError):
+            event.project_id
+
+    def test_event_with_project_id(self):
+        data_bytes = '{"object_kind": "push", "project": {"id": 42}}'.encode("UTF-8")
+        event = sansio.Event.from_http(self.headers, data_bytes, secret=self.secret)
+        assert event.project_id == 42
+
 
 class TestCreateHeaders:
 
