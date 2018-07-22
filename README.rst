@@ -23,6 +23,8 @@ Gidgetlab is `available on PyPI <https://pypi.org/project/gidgetlab/>`_.
   python3 -m pip install gidgetlab
 
 
+Note that the library is still in alpha development stage.
+
 Goals
 -----
 
