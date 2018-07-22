@@ -6,7 +6,7 @@ gidgetlab
 
 An asynchronous `GitLab API <https://docs.gitlab.com/ce/api/>`_ library.
 
-This library is based on `gidgethub <https://github.com/brettcannon/gidgethub>`_ from Brett Cannon,
+This library is based on gidgethub_ from Brett Cannon,
 an async GitHub API library.
 
 I liked the concept and decided to adapt it to the GitLab API.
@@ -28,7 +28,7 @@ Note that the library is still in alpha development stage.
 Goals
 -----
 
-The key goal is the same as `gidgethub <https://gidgethub.readthedocs.io/>`_ (but for GitLab):
+The key goal is the same as gidgethub_ (but for GitLab):
 to provide a base library for the `GitLab API <https://docs.gitlab.com/ce/api/>`_
 which performs no I/O of its own (a `sans-I/O <https://sans-io.readthedocs.io/>`_ library).
 This allows users to choose whatever HTTP library they prefer while parceling out GitLab-specific
@@ -43,3 +43,5 @@ Alternative libraries
 
 If you think you want a different approach to the GitLab API,
 `GitLab maintains a list of libraries <https://about.gitlab.com/applications/#api-clients/>`_.
+
+.. _gidgethub: https://github.com/brettcannon/gidgethub
