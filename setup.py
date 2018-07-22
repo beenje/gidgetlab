@@ -12,7 +12,7 @@ long_description = pathlib.Path("README.rst").read_text("utf-8")
 
 setuptools.setup(
     name="gidgetlab",
-    version="0.1.0",
+    version="0.1.0.post1",
     description="An async GitLab API library",
     long_description=long_description,
     url="https://gitlab.com/beenje/gidgetlab",
