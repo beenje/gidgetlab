@@ -12,7 +12,6 @@ long_description = pathlib.Path("README.rst").read_text("utf-8")
 
 setuptools.setup(
     name="gidgetlab",
-    version="0.1.0.post1",
     description="An async GitLab API library",
     long_description=long_description,
     url="https://gitlab.com/beenje/gidgetlab",
@@ -30,7 +29,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     zip_safe=True,
     python_requires=">=3.6.0",
-    setup_requires=["pytest-runner>=2.11.0"],
+    use_scm_version=True,
+    setup_requires=["setuptools_scm", "pytest-runner>=2.11.0"],
     tests_require=tests_requires,
     install_requires=["uritemplate>=3.0.0"],
     extras_require={

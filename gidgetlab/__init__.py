@@ -1,8 +1,14 @@
 """An async GitLab API library"""
-__version__ = "0.1.0.dev"
 
 import http
 from typing import Any
+from pkg_resources import get_distribution, DistributionNotFound
+
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    pass
 
 
 class GitLabException(Exception):
