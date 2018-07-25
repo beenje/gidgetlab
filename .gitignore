@@ -1,5 +1,7 @@
 # vim swap files
 *.swp
+# OSX
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
