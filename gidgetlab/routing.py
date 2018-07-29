@@ -7,8 +7,24 @@ AsyncCallback = Callable[..., Awaitable[None]]
 
 
 class Router:
+    """
+    An object to route a :class:`gidgetlab.sansio.Event` instance to
+    appropriate registered asynchronous callbacks.
 
-    """Route webhook events to registered functions."""
+    The initializer for this class takes an arbitrary number of other
+    routers to help build a single router from sub-routers. Typically
+    this is used when each semantic set of features has a router and
+    are then used to construct a server-wide router.
+
+    Each callback registered with this class is expected to be
+    :term:`awaitable` and to accept at least a single
+    :class:`~gidgetlab.sansio.Event` instance:
+
+    .. code-block:: python
+
+        async def callback(event, *args, **kwargs):
+            ...
+    """
 
     def __init__(self, *other_routers: "Router") -> None:
         """Instantiate a new router (possibly from other routers)."""
@@ -29,12 +45,25 @@ class Router:
     def add(
         self, func: AsyncCallback, event_type: str, **object_attribute: Any
     ) -> None:
-        """Add a new route.
+        """Add an asynchronous callback for an event.
 
-        After registering 'func' for the specified event_type, an
-        optional object_attribute may be provided. By providing an extra
-        keyword argument, dispatching can occur based on a key from the
-        object_attributes dict of the data in the event being dispatched.
+        The *event_type* argument corresponds to the
+        :attr:`gidgetlab.sansio.Event.event` attribute of the event
+        that the callback is interested in. The arbitrary keyword
+        arguments is used as a key/value pair to compare against what
+        is provided in :attr:`gidgetlab.sansio.Event.object_attributes`.
+        Only 0 or 1 keyword-only arguments may be provided, otherwise
+        :exc:`TypeError` is raised.
+
+        For example, to register a callback for any opened issues,
+        you would call:
+
+        .. code-block:: python
+
+            async def callback(event):
+                ...
+
+            router.add(callback, "Issue Hook", action="open")
         """
         if len(object_attribute) > 1:
             raise TypeError(
@@ -55,7 +84,16 @@ class Router:
     def register(
         self, event_type: str, **object_attribute: Any
     ) -> Callable[[AsyncCallback], AsyncCallback]:
-        """Decorator to apply the add() method to a function."""
+        """A decorator that calls :meth:`add` on the decorated function.
+
+        .. code-block:: python
+
+            router = gidgetlab.routing.Router()
+
+            @router.register("Issue Hook", action="open")
+            async def callback(event):
+                ...
+        """
 
         def decorator(func: AsyncCallback) -> AsyncCallback:
             self.add(func, event_type, **object_attribute)
@@ -64,7 +102,10 @@ class Router:
         return decorator
 
     async def dispatch(self, event: sansio.Event, *args: Any, **kwargs: Any) -> None:
-        """Dispatch an event to all registered function(s)."""
+        """Call the appropriate asynchronous callbacks for the *event*.
+        The provided event and any other arguments will be passed
+        down to the callback unmodified.
+        """
 
         found_callbacks = []
         try:

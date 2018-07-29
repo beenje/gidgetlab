@@ -7,6 +7,22 @@ from . import abc as gl_abc
 
 
 class GitLabAPI(gl_abc.GitLabAPI):
+    """An implementation of :class:`gidgetlab.abc.GitLabAPI` using
+    `aiohttp <https://aiohttp.readthedocs.io>`_.
+
+    Typical usage will be::
+
+        import aiohttp
+        import gidgetlab.aiohttp
+
+
+        async with aiohttp.ClientSession() as session:
+            gl = gidgetlab.aiohttp.GitLabAPI(session, requester,
+                                             access_token=access_token)
+            # Make your requests, e.g. ...
+            data = await gl.getitem("/templates/licenses/MIT")
+    """
+
     def __init__(
         self, session: aiohttp.ClientSession, *args: Any, **kwargs: Any
     ) -> None:

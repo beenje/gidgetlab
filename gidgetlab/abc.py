@@ -14,8 +14,22 @@ CACHE_TYPE = MutableMapping[str, Tuple[Opt[str], Opt[str], Any, Opt[str]]]
 
 
 class GitLabAPI(abc.ABC):
+    """Provide an :py:term:`abstract base class` which abstracts out the
+    HTTP library being used to send requests to GitLab. The class is
+    initialized with the requester's name and optionally their
+    Access token and a cache object.
 
-    """Provide an idiomatic API for making calls to GitLab's API."""
+    For methods that send data to GitLab, there is a *data* argument which
+    accepts an object which can be serialized to JSON (because
+    ``None`` is a legitimate JSON value, ``""`` is used to represent
+    no data).
+
+    The returned value for GitLab requests is the decoded body of the
+    response according to :func:`gidgetlab.sansio.decipher_response`.
+    If the status code returned by the HTTP request is anything other
+    than ``200``, ``201``, or ``204``, then an appropriate
+    :exc:`~gidgetlab.HTTPException` is raised.
+    """
 
     def __init__(
         self,
@@ -36,11 +50,22 @@ class GitLabAPI(abc.ABC):
     async def _request(
         self, method: str, url: str, headers: Mapping, body: bytes = b""
     ) -> Tuple[int, Mapping, bytes]:
-        """Make an HTTP request."""
+        """An abstract :term:`coroutine` to make an HTTP request.
+
+        The given *headers* will have lower-case keys and include not only
+        GitLab-specific fields but also ``content-length`` (and ``content-type`` if appropriate).
+
+        The expected return value is a tuple consisting of the status
+        code, headers, and the body of the HTTP response. The headers
+        dictionary is expected to work with lower-case keys.
+        """
 
     @abc.abstractmethod
     async def sleep(self, seconds: float) -> None:
-        """Sleep for the specified number of seconds."""
+        """An abstract :term:`coroutine` which causes the coroutine to
+        sleep for the specified number of seconds. This is provided to
+        help prevent from going over one's `rate limit <https://gitlab.com/gitlab-org/gitlab-ce/issues/41308>`_.
+        """
 
     def format_url(self, url: str, url_vars: Mapping[str, Any]) -> str:
         """Construct a URL for the GitLab API.
@@ -49,7 +74,7 @@ class GitLabAPI(abc.ABC):
         domain will be added. This is to help when copying the relative URL directly
         from the GitLab developer documentation.
 
-        The dict provided in url_vars is used in URI template formatting.
+        The dict provided in *url_vars* is used in URI template formatting.
         """
         # Works even if 'url' is fully-qualified.
         url = urllib.parse.urljoin(self.api_url, url.lstrip("/"))
@@ -99,12 +124,27 @@ class GitLabAPI(abc.ABC):
         return data, more
 
     async def getitem(self, url: str, url_vars: Dict = {}) -> Any:
-        """Send a GET request for a single item to the specified endpoint."""
+        """Get a single item from GitLab.
+
+        .. note::
+            For ``GET`` calls that can return multiple values and
+            potentially require pagination, see ``getiter()``.
+        """
         data, _ = await self._make_request("GET", url, url_vars, b"")
         return data
 
     async def getiter(self, url: str, url_vars: Dict = {}) -> AsyncGenerator[Any, None]:
-        """Return an async iterable for all the items at a specified endpoint."""
+        """Get all items from a GitLab API endpoint.
+
+        An asynchronous iterable is returned which will yield all items
+        from the endpoint (i.e. use ``async for`` on the result). Any
+        `pagination <https://docs.gitlab.com/ee/api/README.html#pagination>`_
+        will automatically be followed.
+
+        .. note::
+            For ``GET`` calls that return only a single item, see
+            :meth:`getitem`.
+        """
         data, more = await self._make_request("GET", url, url_vars, b"")
         for item in data:
             yield item
@@ -114,16 +154,20 @@ class GitLabAPI(abc.ABC):
                 yield item
 
     async def post(self, url: str, url_vars: Dict = {}, *, data: Any) -> Any:
+        """Send a ``POST`` request to GitLab."""
         data, _ = await self._make_request("POST", url, url_vars, data)
         return data
 
     async def patch(self, url: str, url_vars: Dict = {}, *, data: Any) -> Any:
+        """Send a ``PATCH`` request to GitLab."""
         data, _ = await self._make_request("PATCH", url, url_vars, data)
         return data
 
     async def put(self, url: str, url_vars: Dict = {}, *, data: Any = b"") -> Any:
+        """Send a ``PUT`` request to GitLab."""
         data, _ = await self._make_request("PUT", url, url_vars, data)
         return data
 
     async def delete(self, url: str, url_vars: Dict = {}, *, data: Any = b"") -> None:
+        """Send a ``DELETE`` request to GitLab."""
         await self._make_request("DELETE", url, url_vars, data)

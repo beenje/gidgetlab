@@ -9,6 +9,26 @@ from . import abc as gl_abc
 
 
 class GitLabAPI(gl_abc.GitLabAPI):
+    """An implementation of :class:`gidgetlab.abc.GitLabAPI` using
+    `treq <https://treq.readthedocs.io>`_.
+
+     Typical usage will be::
+
+        from twisted.internet import reactor, defer, task
+        from gidgetlab.treq import GitLabAPI
+
+        MY_TOKEN = "INSERT_TOKEN_HERE"
+        USER_AGENT = "INSERT_USERNAME_HERE"
+
+        def main(reactor, *args):
+            gl = GitLabAPI(USER_AGENT, access_token=MY_TOKEN)
+            d = defer.ensureDeferred(gl.getitem("/templates/licenses/MIT"))
+            d.addCallback(print)
+            return d
+
+        task.react(main)
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         from twisted.internet import reactor
 

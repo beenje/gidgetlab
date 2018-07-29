@@ -62,28 +62,30 @@ def _decode_body(
 
 
 class Event:
-
-    """Details of a GitLab webhook event."""
+    """Representation of a GitLab webhook event."""
 
     def __init__(self, data: Any, *, event: str, secret: Optional[str] = None) -> None:
         # https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events
         # https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#secret-token
+        #: The payload of the `event <https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events>`_
         self.data = data
         # Event is not an enum as GitLab provides the string. This allows them
         # to add new events without having to mirror them here. There's also no
         # direct worry of a user typing in the wrong event name and thus no need
         # for an enum's typing protection.
+        #: The string representation of the `triggering event <https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events>`_
         self.event = event
+        #: The secret token of the `webhook <https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#secret-token>`_
         self.secret = secret
 
     @property
     def object_attributes(self) -> Union[Dict[str, Any], Any]:
-        """Helper to easily access the object_attributes dict from an event data"""
+        """Property to easily access the object_attributes dict from an event data"""
         return self.data.get("object_attributes", {})
 
     @property
     def project_id(self) -> Union[int, Any]:
-        """Helper to easily access the project_id from an event data"""
+        """Property to easily access the project_id from an event data"""
         try:
             return self.data["project"]["id"]
         except KeyError as exc:
@@ -93,18 +95,18 @@ class Event:
     def from_http(
         cls, headers: Mapping, body: bytes, *, secret: Optional[str] = None
     ) -> "Event":
-        """Construct an event from HTTP headers and JSON body data.
+        """Construct an :class:`Event` instance from HTTP headers and JSON body data.
 
-        The mapping providing the headers is expected to support lowercase keys.
+        The mapping providing the *headers* is expected to support lowercase keys.
 
         Since this method assumes the body of the HTTP request is JSON, a check
         is performed for a content-type of "application/json".
-        If the content-type does not match, BadRequest is raised.
+        If the content-type does not match, :exc:`~gidgetlab.exceptions.BadRequest` is raised.
 
         If the appropriate headers are provided for event validation, then it
         will be performed unconditionally. Any failure in validation
-        (including not providing a secret) will lead to ValidationFailure being
-        raised.
+        (including not providing a *secret*) will lead to :exc:`~gidgetlab.exceptions.ValidationFailure`
+        being raised.
         """
         if "x-gitlab-token" in headers:
             # https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#secret-token
@@ -132,18 +134,18 @@ def create_headers(
 ) -> Dict[str, str]:
     """Create a dict representing GitLab-specific header fields.
 
-    The user agent is set according to who the requester is. GitLab asks it be
-    either a username or project name.
+    The user agent is set according to who the *requester* is.
+    GitLab doesn't require anything specific but setting it to a username or project name
+    is good practice (this is required by GitHub API).
 
-    The access_token allows making an authenticated request. This can be
-    important if you need the expanded rate limit provided by an authenticated
-    request.
+    The *access_token* allows making an
+    `authenticated request <https://docs.gitlab.com/ce/api/README.html#authentication>`_.
+    Only `Personal Access Tokens <https://docs.gitlab.com/ce/api/README.html#personal-access-tokens>`_ are supported.
+    Most API requests require authentication, or will only return public data when
+    authentication is not provided.
 
     For consistency, all keys in the returned dict will be lowercased.
     """
-    # user-agent: https://developer.github.com/v3/#user-agent-required
-    # accept: https://developer.github.com/v3/#current-version
-    #         https://developer.github.com/v3/media/
     # Private-Token: https://docs.gitlab.com/ce/api/README.html#personal-access-tokens
     headers = {"user-agent": requester, "accept": "application/json"}
     if access_token is not None:
@@ -155,13 +157,7 @@ class RateLimit:
 
     """The rate limit imposed upon the requester.
 
-    The 'limit' attribute specifies the rate of requests per hour the client is
-    limited to.
-
-    The 'remaining' attribute specifies how many requests remain within the
-    current rate limit that the client can make.
-
-    The reset_datetime attribute is a datetime object representing when
+    The *reset_epoch* argument is expected to be UTC seconds from the epoch.
     effectively 'left' resets to 'rate'. The datetime object is timezone-aware
     and set to UTC.
 
@@ -170,8 +166,6 @@ class RateLimit:
     reset datetime has passed.
     """
 
-    # https://developer.github.com/v3/#rate-limiting
-
     def __init__(self, *, limit: int, remaining: int, reset_epoch: float) -> None:
         """Instantiate a RateLimit object.
 
@@ -179,10 +173,12 @@ class RateLimit:
         """
         # Instance attribute names stem from the name GitLab uses in their
         # API documentation.
+        #: The maximum limit of requests per hour the requester can make.
         self.limit = limit
+        #: How many requests are left for the request until their quota is reset.
         self.remaining = remaining
-        # Name specifies the type to remind users that the epoch is not stored
-        # as an int as the GitLab API returns.
+        #: The :class:`datetime.datetime` object representing when the requester's
+        #: quota is refreshed. The object is timezone-aware to UTC.
         self.reset_datetime = datetime.datetime.fromtimestamp(
             reset_epoch, datetime.timezone.utc
         )
@@ -201,7 +197,7 @@ class RateLimit:
 
     @classmethod
     def from_http(cls, headers: Mapping) -> Optional["RateLimit"]:
-        """Gather rate limit information from HTTP headers.
+        """Create a :class:`RateLimit` instance from the HTTP headers of a GitLab API response.
 
         The mapping providing the headers is expected to support lowercase
         keys.  Returns ``None`` if ratelimit info is not found in the headers.
@@ -255,7 +251,7 @@ def decipher_response(
     may need to be expanded.
 
     If the status code is anything other than 200, 201, or 204, then
-    an HTTPException is raised.
+    an appropriate :exc:`~gidgetlab.exceptions.HTTPException` is raised.
     """
     data = _decode_body(headers.get("content-type"), body)
     if status_code in {200, 201, 204}:

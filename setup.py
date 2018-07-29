@@ -2,7 +2,7 @@ import pathlib
 import setuptools
 
 
-docs_requires = ["sphinx"]
+docs_requires = ["sphinx", "sphinx-autodoc-typehints"]
 tests_requires = ["pytest>=3.0.0", "pytest-asyncio"]
 aiohttp_requires = ["aiohttp"]
 treq_requires = ["treq", "twisted[tls]"]

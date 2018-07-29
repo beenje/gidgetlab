@@ -5,6 +5,10 @@ from . import abc as gl_abc
 
 
 class GitLabAPI(gl_abc.GitLabAPI):
+    """An implementation of :class:`gidgetlab.abc.GitLabAPI` using
+    `Tornado <http://www.tornadoweb.org/>`_.
+    """
+
     async def _request(
         self, method: str, url: str, headers: Mapping, body: bytes = b""
     ) -> Tuple[int, Mapping, bytes]:
