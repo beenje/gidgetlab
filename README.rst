@@ -4,6 +4,10 @@ gidgetlab
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
 
+.. image:: https://readthedocs.org/projects/gidgetlab/badge/?version=latest
+    :target: https://gidgetlab.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 An asynchronous `GitLab API <https://docs.gitlab.com/ce/api/>`_ library.
 
 This library is based on gidgethub_ from Brett Cannon,
