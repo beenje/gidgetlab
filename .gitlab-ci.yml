@@ -1,0 +1,19 @@
+stages:
+  - check
+  - test
+
+check:
+  stage: check
+  image: python:3.6
+  before_script:
+    - pip install pre-commit
+  script:
+    - pre-commit run --all-files
+
+test:
+  stage: test
+  image: python:3.6
+  before_script:
+    - pip install .[dev]
+  script:
+    - pytest --cov=gidgetlab
