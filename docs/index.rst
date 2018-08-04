@@ -26,7 +26,6 @@ whenever an issue is opened::
         """
         Whenever an issue is opened, greet the author and say thanks.
         """
-        print(event)
         url = f"/projects/{event.project_id}/issues/{event.object_attributes['iid']}/notes"
         message = f"Thanks for the report @{event.data['user']['username']}! I will look into it ASAP! (I'm a bot)."
         await gl.post(url, data={"body": message})
