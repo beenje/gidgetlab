@@ -10,9 +10,17 @@ check:
   script:
     - pre-commit run --all-files
 
-test:
+test-python36:
   stage: test
   image: python:3.6
+  before_script:
+    - pip install .[dev]
+  script:
+    - pytest --cov=gidgetlab
+
+test-python37:
+  stage: test
+  image: python:3.7
   before_script:
     - pip install .[dev]
   script:
