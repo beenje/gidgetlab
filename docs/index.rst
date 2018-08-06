@@ -6,6 +6,26 @@
 gidgetlab --- An async library for calling GitLab's API
 =======================================================
 
+This library is based on gidgethub_ from Brett Cannon,
+an async GitHub API library.
+
+I liked the concept with the asynchronous and `sans-I/O <https://sans-io.readthedocs.io/>`_
+approach and decided to adapt it to the GitLab's API.
+All credit to `Brett Cannon <https://github.com/brettcannon/>`_ for the initial library!
+
+The main goal is to easily write GitLab bots: applications that
+run automation on GitLab, using GitLab WebHooks and API.
+This was inspired by `Mariatta <https://github.com/Mariatta>`_ PyCon 2018 workshop:
+`Build-a-GitHub-Bot Workshop <http://github-bot-tutorial.readthedocs.io/en/latest/index.html>`_.
+
+This project has three primary layers to it. The base layer is
+:mod:`gidgetlab.sansio` and :mod:`gidgetlab.routing` which provide the
+tools necessary to work with GitLab's API. The next layer up is
+:mod:`gidgetlab.abc` which provides an abstract base class for a
+cleaner, unified API. Finally, the top layer is using an
+implementation of the abstract base class,
+e.g. :mod:`gidgetlab.aiohttp`.
+
 Quick start
 -----------
 
@@ -79,3 +99,6 @@ Please use the navigation sidebar on the left to begin.
    treq
    tornado
    changelog
+
+
+.. _gidgethub: https://github.com/brettcannon/gidgethub
