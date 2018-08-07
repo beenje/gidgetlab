@@ -118,18 +118,18 @@ async def test_getitem():
 
 @pytest.mark.asyncio
 async def test_getiter():
-    """Test that getiter() returns an async iterable as well as URI expansion."""
+    """Test that getiter() returns an async iterable as well as query string params."""
     original_data = [1, 2]
-    next_url = "https://gitlab.com/api/v4/fake{/extra}?page=2"
+    next_url = "https://gitlab.com/api/v4/fake?page=2"
     headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
     headers["content-type"] = "application/json; charset=UTF-8"
     headers["link"] = f'<{next_url}>; rel="next"'
     gl = MockGitLabAPI(headers=headers, body=json.dumps(original_data).encode("utf8"))
     data = []
-    async for item in gl.getiter("/fake", {"extra": "stuff"}):
+    async for item in gl.getiter("/fake", {"foo": "stuff"}):
         data.append(item)
     assert gl.method == "GET"
-    assert gl.url == "https://gitlab.com/api/v4/fake/stuff?page=2"
+    assert gl.url == "https://gitlab.com/api/v4/fake?page=2&foo=stuff"
     assert len(data) == 4
     assert data[0] == 1
     assert data[1] == 2
@@ -311,35 +311,48 @@ class TestFormatUrl:
         url = gl.format_url("/projects", {})
         assert url == "https://gitlab.com/api/v3/projects"
 
-    def test_template(self):
+    def test_params(self):
         gl = MockGitLabAPI()
-        template_url = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets{/snipppet_id}"
-        template_data = {"snipppet_id": "1234"}
-        # Substituting an absolute URL.
-        url = gl.format_url(template_url, template_data)
+        url = "https://gitlab.com/api/v4/projects/9/trigger/pipeline"
+        params = {"token": "TOKEN", "ref": "master"}
+        # Pass params on an absolute URL.
+        url = gl.format_url(url, params)
         assert (
             url
-            == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+            == "https://gitlab.com/api/v4/projects/9/trigger/pipeline?token=TOKEN&ref=master"
         )
-        # No substituting an absolute URL.
-        url = gl.format_url(template_url, {})
-        assert (
-            url == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets"
-        )
-        # Substituting a relative URL.
-        url = gl.format_url(
-            "/projects/gitlab-org%2Fgitlab-ce/snippets{/snipppet_id}", template_data
-        )
+        # No parmas on an absolute URL.
+        url = gl.format_url(url, {})
+        assert url == url
+        # Pass params on a relative URL.
+        url = gl.format_url("/projects/9/trigger/pipeline", params)
         assert (
             url
-            == "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-ce/snippets/1234"
+            == "https://gitlab.com/api/v4/projects/9/trigger/pipeline?token=TOKEN&ref=master"
         )
 
-    def test_quoting(self):
+    def test_params_quoting(self):
         gl = MockGitLabAPI()
-        template_url = "https://gitlab.com/api/v4/repos/python/cpython/labels{/name}"
-        label = {"name": "CLA signed"}
-        url = gl.format_url(template_url, label)
+        url = "https://gitlab.com/api/v4/projects/9/trigger/pipeline"
+        params = {"token": "TOKEN", "ref": "my branch"}
+        url = gl.format_url(url, params)
         assert (
-            url == "https://gitlab.com/api/v4/repos/python/cpython/labels/CLA%20signed"
+            url
+            == "https://gitlab.com/api/v4/projects/9/trigger/pipeline?token=TOKEN&ref=my+branch"
+        )
+
+    def test_params_update_existing_query_string(self):
+        gl = MockGitLabAPI()
+        url = "https://gitlab.com/api/v4/fake?page=1"
+        params = {"key1": "value1", "key2": "value2"}
+        url = gl.format_url(url, params)
+        assert url == "https://gitlab.com/api/v4/fake?page=1&key1=value1&key2=value2"
+
+    def test_params_list_of_items(self):
+        gl = MockGitLabAPI()
+        url = "https://gitlab.com/api/v4/fake"
+        params = {"key1": "value1", "key2": ["value2", "value3"]}
+        url = gl.format_url(url, params)
+        assert (
+            url == "https://gitlab.com/api/v4/fake?key1=value1&key2=value2&key2=value3"
         )

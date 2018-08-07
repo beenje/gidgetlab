@@ -32,7 +32,6 @@ setuptools.setup(
     use_scm_version=True,
     setup_requires=["setuptools_scm", "pytest-runner>=2.11.0"],
     tests_require=tests_requires,
-    install_requires=["uritemplate>=3.0.0"],
     extras_require={
         "docs": docs_requires,
         "tests": tests_requires,
