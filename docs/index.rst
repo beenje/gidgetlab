@@ -85,6 +85,13 @@ Installation
   python3 -m pip install gidgetlab
 
 
+You can get the source from GitLab: https://gitlab.com/beenje/gidgetlab
+
+::
+
+  git clone https://gitlab.com/beenje/gidgetlab.git
+
+
 Please use the navigation sidebar on the left to begin.
 
 .. toctree::
