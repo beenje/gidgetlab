@@ -3,8 +3,8 @@ import setuptools
 
 
 docs_requires = ["sphinx", "sphinx-autodoc-typehints"]
-tests_requires = ["pytest>=3.0.0", "pytest-asyncio", "pytest-cov"]
-aiohttp_requires = ["aiohttp"]
+tests_requires = ["pytest>=3.0.0", "pytest-asyncio", "pytest-cov", "pytest-aiohttp"]
+aiohttp_requires = ["aiohttp", "cachetools"]
 treq_requires = ["treq", "twisted[tls]"]
 tornado_requires = ["tornado"]
 
