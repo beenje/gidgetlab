@@ -5,7 +5,8 @@ Changelog
 ------------------
 
 * Allow to pass any keyword arguments to aiohttp.web.run_app()
-  to configure port, logging...
+  from bot.run() to configure port, logging...
+* Improve documentation (thanks to Jon McKenzie)
 
 0.3.0 (2018-08-21)
 ------------------
