@@ -49,6 +49,11 @@ Gidgetlab is `available on PyPI <https://pypi.org/project/gidgetlab/>`_.
 
   python3 -m pip install gidgetlab
 
+To install web server support (e.g. for ``aiohttp``, ``treq``, or ``tornado``), specify it as an extra dependency:
+
+::
+
+  python3 -m pip install gidgetlab[aiohttp]
 
 Note that the library is still in alpha development stage.
 
