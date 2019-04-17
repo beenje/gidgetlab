@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3.1 (2019-04-17)
+------------------
+
+* Allow to pass any keyword arguments to aiohttp.web.run_app()
+  to configure port, logging...
+
 0.3.0 (2018-08-21)
 ------------------
 
