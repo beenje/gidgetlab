@@ -146,7 +146,7 @@ class GitLabBot:
                 # Call the appropriate callback(s) for the event
                 await self.router.dispatch(event, gl)
             return web.Response(status=200)
-        except Exception as exc:
+        except Exception:
             traceback.print_exc(file=sys.stderr)
             return web.Response(status=500)
 
