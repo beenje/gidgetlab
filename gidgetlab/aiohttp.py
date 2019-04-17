@@ -150,6 +150,9 @@ class GitLabBot:
             traceback.print_exc(file=sys.stderr)
             return web.Response(status=500)
 
-    def run(self, port: Optional[int] = None) -> None:
-        """Run the bot web server"""
-        web.run_app(self.app, port=port)
+    def run(self, **kwargs: Any) -> None:
+        """Run the bot web server
+
+        All keyword arguments are passed to the :func:`aiohttp.web.run_app` function.
+        """
+        web.run_app(self.app, **kwargs)
