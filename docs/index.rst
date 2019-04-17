@@ -63,12 +63,12 @@ Installation
 ::
 
   python3 -m pip install gidgetlab
-  
+
 To install web server support (e.g. for ``aiohttp``, ``treq``, or ``tornado``), specify it as an extra dependency:
 
 ::
 
-  python 3 -m pip install gidgetlab[aiohttp]
+  python3 -m pip install gidgetlab[aiohttp]
 
 
 You can get the source from GitLab: https://gitlab.com/beenje/gidgetlab
