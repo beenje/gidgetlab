@@ -135,3 +135,12 @@ class TestGitLabBot:
         response = await client.post("/", headers=headers, json=data)
         assert response.status == 200
         assert issue_mock.called
+
+    async def test_health(self, aiohttp_client):
+        """The server should answer 'Bot OK' on /health endpoint"""
+        bot = gl_aiohttp.GitLabBot("gidgetlab")
+        client = await aiohttp_client(bot.app)
+        response = await client.get("/health")
+        assert response.status == 200
+        text = await response.text()
+        assert text == "Bot OK"

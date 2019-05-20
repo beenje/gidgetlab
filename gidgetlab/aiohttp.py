@@ -110,6 +110,7 @@ class GitLabBot:
         self.kwargs = kwargs
         self.app = web.Application()
         self.app.router.add_post("/", self.webhook_handler)
+        self.app.router.add_get("/health", self.health_handler)
 
     @property
     def router(self) -> "routing.Router":
@@ -126,6 +127,13 @@ class GitLabBot:
                 "'register_routers' can only be called when no router is registered"
             )
         self._router = routing.Router(*routers)
+
+    async def health_handler(self, request: "web.Request") -> "web.Response":
+        """Handler to check the health of the bot
+
+        Return 'Bot OK'
+        """
+        return web.Response(text="Bot OK")
 
     async def webhook_handler(self, request: "web.Request") -> "web.Response":
         """Handler that processes GitLab webhook requests"""
