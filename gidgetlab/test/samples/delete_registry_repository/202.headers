@@ -1,0 +1,15 @@
+Cache-Control: no-cache
+Content-Length: 3
+Content-Type: application/json
+Date: Mon, 20 May 2019 10:09:14 GMT
+RateLimit-Limit: 600
+RateLimit-Observed: 1
+RateLimit-Remaining: 599
+RateLimit-Reset: 1558347014
+RateLimit-ResetTime: Mon, 20 May 2019 10:10:14 GMT
+Server: nginx
+Vary: Origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Request-Id: aDKYIXnmbO4
+X-Runtime: 0.061754

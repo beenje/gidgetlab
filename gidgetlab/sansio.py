@@ -250,11 +250,11 @@ def decipher_response(
     returned. Do be aware that the URL can be a URI template and so
     may need to be expanded.
 
-    If the status code is anything other than 200, 201, or 204, then
+    If the status code is anything other than 200, 201, 202, or 204, then
     an appropriate :exc:`~gidgetlab.exceptions.HTTPException` is raised.
     """
     data = _decode_body(headers.get("content-type"), body)
-    if status_code in {200, 201, 204}:
+    if status_code in {200, 201, 202, 204}:
         return data, RateLimit.from_http(headers), _next_link(headers.get("link"))
     else:
         try:

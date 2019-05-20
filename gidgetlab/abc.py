@@ -26,7 +26,7 @@ class GitLabAPI(abc.ABC):
     The returned value for GitLab requests is the decoded body of the
     response according to :func:`gidgetlab.sansio.decipher_response`.
     If the status code returned by the HTTP request is anything other
-    than ``200``, ``201``, or ``204``, then an appropriate
+    than ``200``, ``201``, ``202`` or ``204``, then an appropriate
     :exc:`~gidgetlab.HTTPException` is raised.
     """
 
