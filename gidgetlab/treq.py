@@ -36,8 +36,8 @@ class GitLabAPI(gl_abc.GitLabAPI):
         super().__init__(*args, **kwargs)
 
     async def _request(
-        self, method: str, url: str, headers: Mapping, body: bytes = b""
-    ) -> Tuple[int, Mapping, bytes]:
+        self, method: str, url: str, headers: Mapping[str, str], body: bytes = b""
+    ) -> Tuple[int, Mapping[str, str], bytes]:
         # We need to encode the headers to a format that Twisted will like.
         # As a note: treq will set a content-length even if we do, so we need
         # to strip any content-length header.

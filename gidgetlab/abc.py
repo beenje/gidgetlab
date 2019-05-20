@@ -47,8 +47,8 @@ class GitLabAPI(abc.ABC):
 
     @abc.abstractmethod
     async def _request(
-        self, method: str, url: str, headers: Mapping, body: bytes = b""
-    ) -> Tuple[int, Mapping, bytes]:
+        self, method: str, url: str, headers: Mapping[str, str], body: bytes = b""
+    ) -> Tuple[int, Mapping[str, str], bytes]:
         """An abstract :term:`coroutine` to make an HTTP request.
 
         The given *headers* will have lower-case keys and include not only
@@ -89,7 +89,7 @@ class GitLabAPI(abc.ABC):
         return url
 
     async def _make_request(
-        self, method: str, url: str, params: Dict, data: Any
+        self, method: str, url: str, params: Dict[str, str], data: Any
     ) -> Tuple[bytes, Opt[str]]:
         """Construct and make an HTTP request."""
         filled_url = self.format_url(url, params)
@@ -130,7 +130,7 @@ class GitLabAPI(abc.ABC):
                 self._cache[filled_url] = etag, last_modified, data, more
         return data, more
 
-    async def getitem(self, url: str, params: Dict = {}) -> Any:
+    async def getitem(self, url: str, params: Dict[str, str] = {}) -> Any:
         """Get a single item from GitLab.
 
         .. note::
@@ -140,7 +140,9 @@ class GitLabAPI(abc.ABC):
         data, _ = await self._make_request("GET", url, params, b"")
         return data
 
-    async def getiter(self, url: str, params: Dict = {}) -> AsyncGenerator[Any, None]:
+    async def getiter(
+        self, url: str, params: Dict[str, str] = {}
+    ) -> AsyncGenerator[Any, None]:
         """Get all items from a GitLab API endpoint.
 
         An asynchronous iterable is returned which will yield all items
@@ -160,21 +162,25 @@ class GitLabAPI(abc.ABC):
             async for item in self.getiter(more, params):
                 yield item
 
-    async def post(self, url: str, params: Dict = {}, *, data: Any) -> Any:
+    async def post(self, url: str, params: Dict[str, str] = {}, *, data: Any) -> Any:
         """Send a ``POST`` request to GitLab."""
         data, _ = await self._make_request("POST", url, params, data)
         return data
 
-    async def patch(self, url: str, params: Dict = {}, *, data: Any) -> Any:
+    async def patch(self, url: str, params: Dict[str, str] = {}, *, data: Any) -> Any:
         """Send a ``PATCH`` request to GitLab."""
         data, _ = await self._make_request("PATCH", url, params, data)
         return data
 
-    async def put(self, url: str, params: Dict = {}, *, data: Any = b"") -> Any:
+    async def put(
+        self, url: str, params: Dict[str, str] = {}, *, data: Any = b""
+    ) -> Any:
         """Send a ``PUT`` request to GitLab."""
         data, _ = await self._make_request("PUT", url, params, data)
         return data
 
-    async def delete(self, url: str, params: Dict = {}, *, data: Any = b"") -> None:
+    async def delete(
+        self, url: str, params: Dict[str, str] = {}, *, data: Any = b""
+    ) -> None:
         """Send a ``DELETE`` request to GitLab."""
         await self._make_request("DELETE", url, params, data)

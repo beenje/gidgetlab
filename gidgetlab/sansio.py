@@ -93,7 +93,7 @@ class Event:
 
     @classmethod
     def from_http(
-        cls, headers: Mapping, body: bytes, *, secret: Optional[str] = None
+        cls, headers: Mapping[str, str], body: bytes, *, secret: Optional[str] = None
     ) -> "Event":
         """Construct an :class:`Event` instance from HTTP headers and JSON body data.
 
@@ -196,7 +196,7 @@ class RateLimit:
         return f"< {self.remaining:,}/{self.limit:,} until {self.reset_datetime} >"
 
     @classmethod
-    def from_http(cls, headers: Mapping) -> Optional["RateLimit"]:
+    def from_http(cls, headers: Mapping[str, str]) -> Optional["RateLimit"]:
         """Create a :class:`RateLimit` instance from the HTTP headers of a GitLab API response.
 
         The mapping providing the headers is expected to support lowercase
@@ -231,7 +231,7 @@ def _next_link(link: Optional[str]) -> Optional[str]:
 
 
 def decipher_response(
-    status_code: int, headers: Mapping, body: bytes
+    status_code: int, headers: Mapping[str, str], body: bytes
 ) -> Tuple[Any, Optional[RateLimit], Optional[str]]:
     """Decipher an HTTP response for a GitLab API request.
 
@@ -285,7 +285,7 @@ def decipher_response(
         else:
             exc_type = HTTPException
         status_code_enum = http.HTTPStatus(status_code)
-        args: Tuple
+        args: Union[Tuple[http.HTTPStatus, str], Tuple[http.HTTPStatus]]
         if message:
             args = status_code_enum, message
         else:
