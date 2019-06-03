@@ -58,6 +58,11 @@ class GitLabBot:
     If provided, the **ssl.SSLContext** from *ssl_context* will be passed to
     the underlying **aiohttp.ClientSession**.
 
+    By default, the bot waits 1 second before to process the webhook to give GitLab
+    some time to reach internal consistency. Depending on your use case (if webhooks
+    are used to interact with an external service for example), you might want to
+    disable this 1 second pause by setting *wait_consistency* to False.
+
     The extra *kwargs* are passed to the :class:`GitLabAPI` instance and can
     be used to set a specific **url** and **api_version**.
 
@@ -105,6 +110,7 @@ class GitLabBot:
         access_token: Optional[str] = None,
         cache: Optional[gl_abc.CACHE_TYPE] = None,
         ssl_context: Optional[ssl.SSLContext] = None,
+        wait_consistency: Optional[bool] = True,
         **kwargs: Any,
     ) -> None:
         self.requester = requester
@@ -112,6 +118,7 @@ class GitLabBot:
         self.access_token = access_token or os.environ.get("GL_ACCESS_TOKEN")
         self.cache = cache or cachetools.LRUCache(maxsize=500)
         self.ssl_context = ssl_context
+        self.wait_consistency = wait_consistency
         # Additional keyword arguments to pass to GitLabAPI (url and api_version)
         self.kwargs = kwargs
         self.app = web.Application()
@@ -159,9 +166,10 @@ class GitLabBot:
                     access_token=self.access_token,
                     **self.kwargs,
                 )
-                # Give GitLab some time to reach internal consistency
-                # (taken from bedevere and miss-islington GitHub bots)
-                await asyncio.sleep(1)
+                if self.wait_consistency:
+                    # Give GitLab some time to reach internal consistency
+                    # (taken from bedevere and miss-islington GitHub bots)
+                    await asyncio.sleep(1)
                 # Call the appropriate callback(s) for the event
                 await self.router.dispatch(event, gl)
             return web.Response(status=200)
