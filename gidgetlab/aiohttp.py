@@ -3,6 +3,7 @@ import sys
 import asyncio
 import traceback
 from typing import Any, Mapping, Tuple, Optional
+import ssl
 
 import cachetools
 import aiohttp
@@ -54,6 +55,9 @@ class GitLabBot:
 
     If not given, the cache is set to *cachetools.LRUCache(maxsize=500)*.
 
+    If provided, the **ssl.SSLContext** from *ssl_context* will be passed to
+    the underlying **aiohttp.ClientSession**.
+
     The extra *kwargs* are passed to the :class:`GitLabAPI` instance and can
     be used to set a specific **url** and **api_version**.
 
@@ -100,12 +104,14 @@ class GitLabBot:
         secret: Optional[str] = None,
         access_token: Optional[str] = None,
         cache: Optional[gl_abc.CACHE_TYPE] = None,
+        ssl_context: Optional[ssl.SSLContext] = None,
         **kwargs: Any,
     ) -> None:
         self.requester = requester
         self.secret = secret or os.environ.get("GL_SECRET")
         self.access_token = access_token or os.environ.get("GL_ACCESS_TOKEN")
         self.cache = cache or cachetools.LRUCache(maxsize=500)
+        self.ssl_context = ssl_context
         # Additional keyword arguments to pass to GitLabAPI (url and api_version)
         self.kwargs = kwargs
         self.app = web.Application()
@@ -140,7 +146,12 @@ class GitLabBot:
         try:
             body = await request.read()
             event = sansio.Event.from_http(request.headers, body, secret=self.secret)
-            async with aiohttp.ClientSession() as session:
+            if self.ssl_context is not None:
+                connector = aiohttp.TCPConnector(ssl_context=self.ssl_context)
+            else:
+                connector = None
+
+            async with aiohttp.ClientSession(connector=connector) as session:
                 gl = GitLabAPI(
                     session,
                     self.requester,
