@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.0 (2019-07-08)
+------------------
+
+* Allow to pass an optional SSLContext to GitLabBot (thanks to Clément Moyroud)
+* Allow the bot to not wait for consistency
+
 0.4.0 (2019-05-20)
 ------------------
 
