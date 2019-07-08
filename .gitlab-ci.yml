@@ -1,6 +1,7 @@
 stages:
   - check
   - test
+  - release
 
 check:
   stage: check
@@ -25,3 +26,14 @@ test-python37:
     - pip install .[dev]
   script:
     - pytest --cov=gidgetlab
+
+release-pypi:
+  stage: release
+  image: python:3.7
+  before_script:
+    - pip install twine
+  script:
+    - python setup.py check sdist bdist_wheel
+    - twine upload dist/*
+  only:
+    - tags
