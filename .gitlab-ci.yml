@@ -27,6 +27,14 @@ test-python37:
   script:
     - pytest --cov=gidgetlab
 
+test-python38:
+  stage: test
+  image: python:3.8
+  before_script:
+    - pip install .[dev]
+  script:
+    - pytest --cov=gidgetlab
+
 release-pypi:
   stage: release
   image: python:3.7

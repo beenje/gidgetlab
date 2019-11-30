@@ -24,6 +24,8 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     keywords="gitlab sans-io async",
     packages=setuptools.find_packages(),
