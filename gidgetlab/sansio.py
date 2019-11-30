@@ -13,7 +13,7 @@ import re
 from typing import Any, Dict, Mapping, Optional, Tuple, Type, Union
 import urllib.parse
 
-from . import (
+from .exceptions import (
     BadRequest,
     GitLabBroken,
     HTTPException,
