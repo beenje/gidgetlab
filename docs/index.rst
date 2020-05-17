@@ -64,7 +64,7 @@ Installation
 
   python3 -m pip install gidgetlab
 
-To install web server support (e.g. for ``aiohttp``, ``treq``, or ``tornado``), specify it as an extra dependency:
+To install web server support (e.g. for ``aiohttp``, ``httpx``, ``treq``, or ``tornado``), specify it as an extra dependency:
 
 ::
 
@@ -89,6 +89,7 @@ Please use the navigation sidebar on the left to begin.
    routing
    abc
    aiohttp
+   httpx
    treq
    tornado
    changelog

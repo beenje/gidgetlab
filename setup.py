@@ -5,6 +5,7 @@ import setuptools
 docs_requires = ["sphinx", "sphinx-autodoc-typehints"]
 tests_requires = ["pytest>=3.0.0", "pytest-asyncio", "pytest-cov", "pytest-aiohttp"]
 aiohttp_requires = ["aiohttp", "cachetools"]
+httpx_requires = ["httpx>=0.11.0"]
 treq_requires = ["treq", "twisted[tls]"]
 tornado_requires = ["tornado"]
 
@@ -38,12 +39,14 @@ setuptools.setup(
         "docs": docs_requires,
         "tests": tests_requires,
         "aiohttp": aiohttp_requires,
+        "httpx": httpx_requires,
         "treq": treq_requires,
         "tornado": tornado_requires,
         "dev": (
             docs_requires
             + tests_requires
             + aiohttp_requires
+            + httpx_requires
             + treq_requires
             + tornado_requires
         ),
