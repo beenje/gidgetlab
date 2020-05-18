@@ -4,8 +4,12 @@ Changelog
 0.6.0 (2020-05-18)
 ------------------
 
-* add httpx support
-* add Python 3.8 tests
+* Add httpx support
+* Add Python 3.8 tests
+* Move tests outside package to fix coverage
+* Add pipeline, coverage and pre-commit badges
+* Add py.typed file (PEP 561)
+* Switch to RTD's default theme
 
 0.5.0 (2019-07-08)
 ------------------
