@@ -6,6 +6,23 @@
 gidgetlab --- An async library for calling GitLab's API
 =======================================================
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
+
+.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+    :target: https://github.com/pre-commit/pre-commit
+    :alt: pre-commit
+
+.. image:: https://readthedocs.org/projects/gidgetlab/badge/?version=latest
+    :target: https://gidgetlab.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://gitlab.com/beenje/gidgetlab/badges/master/pipeline.svg
+    :target: https://gitlab.com/beenje/gidgetlab
+
+.. image:: https://gitlab.com/beenje/gidgetlab/badges/master/coverage.svg
+    :target: https://gitlab.com/beenje/gidgetlab
+
 This library is based on gidgethub_ from Brett Cannon,
 an async GitHub API library.
 

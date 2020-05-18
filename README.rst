@@ -4,9 +4,17 @@ gidgetlab
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
 
+.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+    :target: https://github.com/pre-commit/pre-commit
+    :alt: pre-commit
+
 .. image:: https://readthedocs.org/projects/gidgetlab/badge/?version=latest
     :target: https://gidgetlab.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
+
+.. image:: https://gitlab.com/beenje/gidgetlab/badges/master/pipeline.svg
+
+.. image:: https://gitlab.com/beenje/gidgetlab/badges/master/coverage.svg
 
 An asynchronous `GitLab API`_ library.
 
