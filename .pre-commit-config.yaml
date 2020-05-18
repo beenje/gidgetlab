@@ -12,5 +12,7 @@ repos:
     rev: v0.770
     hooks:
       - id: mypy
+        additional_dependencies:
+          - 'tornado'
         args: [--ignore-missing-imports, --strict]
         exclude: (gidgetlab/test/|docs/)
