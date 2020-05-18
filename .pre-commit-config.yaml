@@ -15,4 +15,4 @@ repos:
         additional_dependencies:
           - 'tornado'
         args: [--ignore-missing-imports, --strict]
-        exclude: (gidgetlab/test/|docs/)
+        exclude: (tests/|docs/)

@@ -5,8 +5,8 @@ import aiohttp
 import pytest
 
 from unittest.mock import Mock
-from .. import aiohttp as gl_aiohttp
-from .. import sansio, routing
+from gidgetlab import aiohttp as gl_aiohttp
+from gidgetlab import sansio, routing
 
 
 class TestGitLabAPI:

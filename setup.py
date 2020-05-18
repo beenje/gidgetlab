@@ -29,11 +29,11 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
     ],
     keywords="gitlab sans-io async",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=("tests", "tests.*")),
     zip_safe=True,
     python_requires=">=3.6.0",
     use_scm_version=True,
-    setup_requires=["setuptools_scm", "pytest-runner>=2.11.0"],
+    setup_requires=["setuptools_scm"],
     tests_require=tests_requires,
     extras_require={
         "docs": docs_requires,

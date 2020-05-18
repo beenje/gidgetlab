@@ -1,7 +1,7 @@
 import json
 import pytest
-from .. import RedirectionException
-from .. import abc as gl_abc
+from gidgetlab import RedirectionException
+from gidgetlab import abc as gl_abc
 
 
 class MockGitLabAPI(gl_abc.GitLabAPI):

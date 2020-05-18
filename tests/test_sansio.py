@@ -4,7 +4,7 @@ import http
 import json
 import pathlib
 import pytest
-from .. import (
+from gidgetlab import (
     BadRequest,
     GitLabBroken,
     HTTPException,
@@ -13,7 +13,7 @@ from .. import (
     RedirectionException,
     ValidationFailure,
 )
-from .. import sansio
+from gidgetlab import sansio
 
 SAMPLES_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "samples")
 

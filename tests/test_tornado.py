@@ -5,9 +5,9 @@ import tornado
 
 from tornado.testing import AsyncTestCase
 
-from .. import BadRequest
-from .. import sansio
-from .. import tornado as gl_tornado
+from gidgetlab import BadRequest
+from gidgetlab import sansio
+from gidgetlab import tornado as gl_tornado
 
 
 class TornadoTestCase(AsyncTestCase):

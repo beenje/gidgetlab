@@ -17,7 +17,7 @@ test-python36:
   before_script:
     - pip install .[dev]
   script:
-    - pytest --cov=gidgetlab
+    - pytest --cov=gidgetlab tests
 
 test-python37:
   stage: test
@@ -25,7 +25,7 @@ test-python37:
   before_script:
     - pip install .[dev]
   script:
-    - pytest --cov=gidgetlab
+    - pytest --cov=gidgetlab tests
 
 test-python38:
   stage: test
@@ -33,7 +33,7 @@ test-python38:
   before_script:
     - pip install .[dev]
   script:
-    - pytest --cov=gidgetlab
+    - pytest --cov=gidgetlab tests
 
 release-pypi:
   stage: release

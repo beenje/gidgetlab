@@ -1,6 +1,6 @@
 import http
 
-from .. import (
+from gidgetlab import (
     BadRequest,
     GitLabBroken,
     HTTPException,
@@ -8,7 +8,7 @@ from .. import (
     RateLimitExceeded,
     RedirectionException,
 )
-from .. import sansio
+from gidgetlab import sansio
 
 
 class TestHTTPException:

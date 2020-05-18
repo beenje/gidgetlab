@@ -2,8 +2,8 @@ import datetime
 
 from twisted.internet.defer import ensureDeferred
 from twisted.trial.unittest import TestCase
-from .. import treq as gl_treq
-from .. import sansio
+from gidgetlab import treq as gl_treq
+from gidgetlab import sansio
 
 import treq._utils
 
