@@ -113,6 +113,15 @@ class TestEvent:
         assert event.data == self.data
         assert event.secret is None
 
+    def test_from_http_missing_event_header(self):
+        """No x-gitlab-event raises ValidationFailure."""
+        headers_no_event = self.headers.copy()
+        del headers_no_event["x-gitlab-event"]
+        with pytest.raises(ValidationFailure):
+            sansio.Event.from_http(
+                headers_no_event, self.data_bytes, secret=self.secret
+            )
+
     def test_event_without_project_id(self):
         event = sansio.Event.from_http(
             self.headers, self.data_bytes, secret=self.secret

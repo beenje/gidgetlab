@@ -116,7 +116,8 @@ class Event:
                 raise ValidationFailure("invalid secret")
         elif secret is not None:
             raise ValidationFailure("x-gitlab-token is missing")
-
+        if "x-gitlab-event" not in headers:
+            raise ValidationFailure("x-gitlab-event is missing")
         try:
             data = _decode_body(headers["content-type"], body, strict=True)
         except (KeyError, ValueError) as exc:
