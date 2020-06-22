@@ -1,4 +1,5 @@
 """Provide an abstract base class for easier requests."""
+import os
 import abc
 import json
 import urllib.parse
@@ -35,7 +36,7 @@ class GitLabAPI(abc.ABC):
         requester: str,
         *,
         access_token: Opt[str] = None,
-        url: str = "https://gitlab.com",
+        url: str = os.getenv("GL_URL", "https://gitlab.com"),
         api_version: str = "v4",
         cache: Opt[CACHE_TYPE] = None,
     ) -> None:
