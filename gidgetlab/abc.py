@@ -3,7 +3,7 @@ import os
 import abc
 import json
 import urllib.parse
-from typing import Any, AsyncGenerator, Dict, Mapping, MutableMapping, Tuple
+from typing import Any, AsyncGenerator, Dict, Mapping, MutableMapping, Tuple, cast
 from typing import Optional as Opt
 
 from . import sansio
@@ -36,13 +36,14 @@ class GitLabAPI(abc.ABC):
         requester: str,
         *,
         access_token: Opt[str] = None,
-        url: str = os.getenv("GL_URL", "https://gitlab.com"),
+        url: Opt[str] = None,
         api_version: str = "v4",
         cache: Opt[CACHE_TYPE] = None,
     ) -> None:
         self.requester = requester
         self.access_token = access_token
-        self.api_url: str = urllib.parse.urljoin(url, f"/api/{api_version}/")
+        gitlab_url = cast(str, url or os.getenv("GL_URL", "https://gitlab.com"))
+        self.api_url: str = urllib.parse.urljoin(gitlab_url, f"/api/{api_version}/")
         self._cache = cache
         self.rate_limit: Opt[sansio.RateLimit] = None
 

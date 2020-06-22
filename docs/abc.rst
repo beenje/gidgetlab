@@ -15,9 +15,15 @@ Users should instantiate an appropriate subclass once for any single
 set of calls to the GitLab API.
 By default, the official `https://gitlab.com` service is used.
 It's easy to use a private GitLab instance by passing the *url*
-parameter::
+parameter or using the *GL_URL* environment variable::
 
   gl = GitLabAPI(requester, url="https://mygitlab.example.com")
+
+Or::
+
+  export GL_URL=https://mygitlab.example.com
+
+Note that the *url* parameter takes precedence over the *GL_URL* environment variable.
 
 Then one can use the appropriate method to make requests simply, e.g.::
 

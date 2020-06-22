@@ -44,6 +44,32 @@ class TestGitLabAPI:
             data = await gl.getitem("/templates/licenses/mit")
         assert "description" in data
 
+    @pytest.mark.asyncio
+    async def test_api_url_without_env(self, monkeypatch):
+        """Test default GitLab URL"""
+        monkeypatch.delenv("GL_URL", raising=False)
+        async with aiohttp.ClientSession() as session:
+            gl = gl_aiohttp.GitLabAPI(session, "gidgetlab")
+            assert gl.api_url == "https://gitlab.com/api/v4/"
+
+    @pytest.mark.asyncio
+    async def test_api_url_with_env(self, monkeypatch):
+        """Test GitLab URL as environment variable"""
+        monkeypatch.setenv("GL_URL", "https://mygitlab.example.org")
+        async with aiohttp.ClientSession() as session:
+            gl = gl_aiohttp.GitLabAPI(session, "gidgetlab")
+            assert gl.api_url == "https://mygitlab.example.org/api/v4/"
+
+    @pytest.mark.asyncio
+    async def test_api_url_with_env_and_parameter(self, monkeypatch):
+        """Test GitLab URL as parameter override env variable"""
+        monkeypatch.setenv("GL_URL", "https://mygitlab.example.org")
+        async with aiohttp.ClientSession() as session:
+            gl = gl_aiohttp.GitLabAPI(
+                session, "gidgetlab", url="https://another.gitlab.org"
+            )
+            assert gl.api_url == "https://another.gitlab.org/api/v4/"
+
 
 class TestGitLabBot:
     """Tests for gidgetlab.aiohttp.GitLabBot."""
