@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath("."))
 # -- Project information -----------------------------------------------------
 
 project = "gidgetlab"
-copyright = "2018 - {datetime.now():%Y}, Benjamin Bertrand"
+copyright = f"2018 - {datetime.now():%Y}, Benjamin Bertrand"
 author = "Benjamin Bertrand"
 
 # The full version, including alpha/beta/rc tags
