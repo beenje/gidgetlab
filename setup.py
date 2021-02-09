@@ -6,7 +6,7 @@ docs_requires = ["sphinx", "sphinx-autodoc-typehints"]
 tests_requires = ["pytest>=3.0.0", "pytest-asyncio", "pytest-cov", "pytest-aiohttp"]
 aiohttp_requires = ["aiohttp", "cachetools"]
 httpx_requires = ["httpx>=0.11.0"]
-treq_requires = ["treq", "twisted[tls]"]
+treq_requires = ["treq<21", "twisted[tls]"]
 tornado_requires = ["tornado"]
 
 long_description = pathlib.Path("README.rst").read_text("utf-8")
