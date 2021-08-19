@@ -1,7 +1,11 @@
 stages:
   - check
   - test
+  - build
   - release
+
+default:
+  image: python:3.9
 
 check:
   stage: check
@@ -11,37 +15,49 @@ check:
   script:
     - pre-commit run --all-files
 
-test-python36:
+.test:
   stage: test
-  image: python:3.6
   before_script:
     - pip install .[dev]
   script:
-    - pytest --cov=gidgetlab tests
+    - pytest -v --junitxml=report.xml --cov=gidgetlab tests
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+
+test-python36:
+  extends: .test
+  image: python:3.6
 
 test-python37:
-  stage: test
+  extends: .test
   image: python:3.7
-  before_script:
-    - pip install .[dev]
-  script:
-    - pytest --cov=gidgetlab tests
 
 test-python38:
-  stage: test
+  extends: .test
   image: python:3.8
-  before_script:
-    - pip install .[dev]
+
+test-python39:
+  extends: .test
+  image: python:3.9
+
+build-pypi-package:
+  stage: build
   script:
-    - pytest --cov=gidgetlab tests
+    - python setup.py check sdist bdist_wheel
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
 
 release-pypi:
   stage: release
-  image: python:3.7
+  variables:
+    GIT_STRATEGY: none
   before_script:
     - pip install twine
   script:
-    - python setup.py check sdist bdist_wheel
     - twine upload dist/*
   only:
     - tags
