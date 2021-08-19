@@ -26,7 +26,9 @@ async def test__request():
     async with httpx.AsyncClient() as client:
         gl = gl_httpx.GitLabAPI(client, "gidgetlab")
         aio_call = await gl._request(
-            "GET", "https://gitlab.com/api/v4/templates/licenses/mit", request_headers,
+            "GET",
+            "https://gitlab.com/api/v4/templates/licenses/mit",
+            request_headers,
         )
     data, rate_limit, _ = sansio.decipher_response(*aio_call)
     assert "description" in data
