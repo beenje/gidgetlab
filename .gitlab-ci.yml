@@ -20,7 +20,11 @@ check:
   before_script:
     - pip install .[dev]
   script:
-    - pytest --cov=gidgetlab tests
+    - pytest -v --junitxml=report.xml --cov=gidgetlab tests
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
 
 test-python36:
   extends: .test
