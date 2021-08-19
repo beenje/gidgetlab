@@ -2,7 +2,7 @@ import pathlib
 import setuptools
 
 
-docs_requires = ["sphinx", "sphinx-autodoc-typehints"]
+docs_requires = ["sphinx>=4.0.0", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
 tests_requires = ["pytest>=3.0.0", "pytest-asyncio", "pytest-cov", "pytest-aiohttp"]
 aiohttp_requires = ["aiohttp", "cachetools"]
 httpx_requires = ["httpx>=0.11.0"]
