@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.7.0 (2021-08-19)
+------------------
+
+* Add possibility to set gitlab url via GL_URL env var (thanks to Michael Aigner)
+* Fix KeyError when x-gitlab-event is missing
+* Pin treq to < 21
+* Fix copyright in docs (thanks to Mariatta)
+* Add Python 3.9 tests
+
 0.6.0 (2020-05-18)
 ------------------
 
