@@ -42,6 +42,10 @@ test-python39:
   extends: .test
   image: python:3.9
 
+test-python310:
+  extends: .test
+  image: python:3.10
+
 build-pypi-package:
   stage: build
   script:
