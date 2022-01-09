@@ -48,8 +48,10 @@ test-python310:
 
 build-pypi-package:
   stage: build
+  before_script:
+    - pip install build
   script:
-    - python setup.py check sdist bdist_wheel
+    - python -m build
   artifacts:
     expire_in: 1 week
     paths:
