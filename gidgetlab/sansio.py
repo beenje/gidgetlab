@@ -51,6 +51,8 @@ def _decode_body(
     type_, encoding = _parse_content_type(content_type)
     if not len(body) or not content_type:
         return None
+    if type_ == "application/octet-stream":
+        return body
     decoded_body = body.decode(encoding)
     if type_ == "application/json":
         return json.loads(decoded_body)
