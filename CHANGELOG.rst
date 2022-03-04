@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.0 (2022-03-04)
+------------------
+
+* Support binary in response body (thanks to Ugur Yilmaz)
+* Add python:3.10 tests
+* Improve packaging
+
 0.7.0 (2021-08-19)
 ------------------
 

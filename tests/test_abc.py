@@ -117,6 +117,17 @@ async def test_getitem():
 
 
 @pytest.mark.asyncio
+async def test_getitem_binary():
+    original_data = b"binary content"
+    headers = MockGitLabAPI.DEFAULT_HEADERS.copy()
+    headers["content-type"] = "application/octet-stream"
+    gl = MockGitLabAPI(headers=headers, body=original_data)
+    data = await gl.getitem("/fake")
+    assert gl.method == "GET"
+    assert data == original_data
+
+
+@pytest.mark.asyncio
 async def test_getiter():
     """Test that getiter() returns an async iterable as well as query string params."""
     original_data = [1, 2]
